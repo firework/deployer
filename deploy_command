@@ -1,0 +1,6 @@
+git branch -r
+git fetch origin -p
+git checkout origin/$BRANCH
+composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+php artisan plint:migrate
+gulp --production
