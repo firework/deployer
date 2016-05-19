@@ -2,29 +2,30 @@
 
 namespace App\Jobs;
 
+use App\Deploy;
+use App\DeployOutputs;
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use SSH;
 use Log;
+use File;
 
 class DeploymentQueueJob extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
-    protected $server;
-    protected $branch;
+    protected $deploy_id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($server, $branch)
+    public function __construct($deploy_id)
     {
-        $this->server = $server;
-        $this->branch = $branch;
+        $this->deploy_id = $deploy_id;
     }
 
     /**
@@ -35,31 +36,41 @@ class DeploymentQueueJob extends Job implements ShouldQueue
     public function handle()
     {
         Log::info("Handling queue...");
-        Log::info($this->server);
-        Log::info($this->branch);
 
-        $deploy_commands = [
-            'cd /vagrant',
-            'git checkout ' . $this->branch,
-            'git branch',
-        ];
+        $deploy = Deploy::find($this->deploy_id);
 
-        // $deploy_commands = [
-        //     'git branch -r',
-        //     'git fetch origin -p',
-        //     'git checkout origin/' . $this->branch,
-        //     'composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader',
-        //     'php artisan plint:migrate',
-        //     'gulp --production',
-        // ];
+        $deploy_commands = File::get( base_path() . '/deploy_command' );
+        $deploy_commands = explode(PHP_EOL, $deploy_commands);
 
-        // SSH::into($this->server)->define('deploy', $deploy_commands);
-        // SSH::into($this->server)->task('deploy', function($line) {
+        $deploy_commandsX = [];
+        foreach ($deploy_commands as $key => &$deploy_command) {
+            $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
+            $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
+            $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server, $deploy_command);
+        }
+
+        // ToDo: The right way to send a sequence of commands that should be run together it the way below, but it's not working - Needs investigation!
+        // SSH::into($deploy->server)->define('deploy', $deploy_commands);
+        // SSH::into($deploy->server)->task('deploy', function($line) {
         //     Log::info($line.PHP_EOL);
         // });
 
-        SSH::into($this->server)->run($deploy_commands, function($line) {
+        SSH::into($deploy->server)->run($deploy_commands, function($line) use ($deploy) {
+            $deployOutput = new DeployOutputs();
+            $deployOutput->output = $line;
+            $deployOutput->created_at = date('Y-m-d G:i:s');
+            $deploy->outputs()->save($deployOutput);
             Log::info($line.PHP_EOL);
         });
+
+        $deploy->status = "sucess";
+        $deploy->save();
+    }
+
+    private function failed()
+    {
+        $deploy = Deploy::find($this->deploy_id);
+        $deploy->status = "error";
+        $deploy->save();
     }
 }
