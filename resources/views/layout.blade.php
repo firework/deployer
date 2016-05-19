@@ -4,7 +4,9 @@
         <title>Deploy</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
+        
         <style>
             html, body {
                 height: 100%;
@@ -16,7 +18,8 @@
                 width: 100%;
                 display: table;
                 font-weight: 100;
-                font-family: 'Lato';
+                /*font-family: 'Lato';*/
+                font-family: 'monospace';
             }
 
             .container {
@@ -38,28 +41,12 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">DeployeR</div>
-                <form method="POST" action="deploy">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div>
-                        <label>Select a server:</label>
-                        <select name="server">
-                            @foreach ($servers as $server)
-                                <option>{{ $server }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label>Select a branch:</label>
-                        <select name="branch">
-                            @foreach ($branches as $branch)
-                                <option>{{ $branch }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit">Deploy it!</button>
-                </form>
+                <div class="title">Fire blasteR</div>
+                @yield('content')                
             </div>
         </div>
+
+        <script src="vendor/jquery/jquery.min.js" type="text/javascript"></script>
+        <script src="vendor/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     </body>
 </html>

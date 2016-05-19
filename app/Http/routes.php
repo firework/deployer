@@ -13,4 +13,6 @@
 
 Route::get('/', 'DeployController@index');
 Route::post('/deploy', 'DeployController@deployIt');
-Route::get('/deploy_command', 'DeployController@deployCommand');
+Route::get('/command', 'DeployController@deployCommand');
+Route::post('/save_command', 'DeployController@saveCommand');
+Route::get('/status', 'DeployController@status');

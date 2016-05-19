@@ -36,7 +36,7 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'table' => 'jobs',
+            'table' => 'laravel_jobs',
             'queue' => 'default',
             'expire' => 60,
         ],
