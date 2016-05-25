@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Deploy;
 use App\DeployOutputs;
 use App\Jobs\Job;
+use App\Libraries\SSHLibrary;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,26 +43,13 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $deploy_commands = File::get( base_path() . '/deploy_command' );
         $deploy_commands = explode(PHP_EOL, $deploy_commands);
 
-        $deploy_commandsX = [];
         foreach ($deploy_commands as $key => &$deploy_command) {
             $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
             $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
             $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server, $deploy_command);
         }
 
-        // ToDo: The right way to send a sequence of commands that should be run together it the way below, but it's not working - Needs investigation!
-        // SSH::into($deploy->server)->define('deploy', $deploy_commands);
-        // SSH::into($deploy->server)->task('deploy', function($line) {
-        //     Log::info($line.PHP_EOL);
-        // });
-
-        SSH::into($deploy->server)->run($deploy_commands, function($line) use ($deploy) {
-            $deployOutput = new DeployOutputs();
-            $deployOutput->output = $line;
-            $deployOutput->created_at = date('Y-m-d G:i:s');
-            $deploy->outputs()->save($deployOutput);
-            Log::info($line.PHP_EOL);
-        });
+        SSHLibrary::runDeploy($deploy, $deploy_commands);
 
         $deploy->status = "sucess";
         $deploy->save();

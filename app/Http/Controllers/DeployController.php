@@ -6,13 +6,15 @@ use App\Deploy;
 use App\DeployOutputs;
 use App\Jobs\DeploymentQueueJob;
 use Illuminate\Http\Request;
-use SSH;
+use App\Libraries\GitLibrary;
+
 
 use App\Http\Requests;
 use Log;
 use Session;
 use Config;
 use File;
+use Cache;
 
 class DeployController extends Controller
 {
@@ -27,24 +29,7 @@ class DeployController extends Controller
     		$servers[] = $key;
     	}
 
-    	if (!Session::has('branches')){
-    		SSH::run([
-			    'cd /vagrant',
-			    'git branch',
-			], function($line)
-			{
-			    $branches = explode(PHP_EOL, $line);
-			    foreach ($branches as $key => $value) {
-			    	$branches[$key] = str_replace(['*', ' '], "", $value);
-			    	if (empty($branches[$key])){
-			    		unset($branches[$key]);
-			    	}
-			    }
-			    Session::put('branches', $branches);
-			});
-    	}
-
-        return view('main', ['branches' => Session::get('branches'), 'servers' => $servers]);
+        return view('main', ['branches' => GitLibrary::branches(), 'servers' => $servers]);
     }
 
     public function deployIt(Request $request)
