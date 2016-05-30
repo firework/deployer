@@ -2,33 +2,25 @@
 
 namespace App\Libraries;
 
-use SSH;
 use Cache;
-use Carbon\Carbon;
+use App\Libraries\SSHLibrary;
 
 class GitLibrary
 {
     public static function branches()
     {
-        if(!Cache::has('branches')){
-            SSH::run([
-                'cd /vagrant',
-                'git branch',
-            ], function($line)
-            {
-                $branches = explode(PHP_EOL, $line);
+        // if(!Cache::has('branches')){
 
-                foreach ($branches as $key => $value) {
-                    $branches[$key] = str_replace(['*', ' '], "", $value);
-                    if (empty($branches[$key])){
-                        unset($branches[$key]);
-                    }
-                }
+            SSHLibrary::run(['git fetch origin -p']);
 
-                $expiresAt = Carbon::now()->addMinutes(1);
-                Cache::add('branches', $branches, $expiresAt);
+            $commands = ['git branch -r | grep origin | grep -v HEAD | awk -F/ \'{print $2}\''];
+
+            SSHLibrary::run($commands, function($line, $a) {
+                $branches = array_filter(explode(PHP_EOL, $line));
+
+                Cache::put('branches', $branches, 1);
             });
-        }
+        // }
 
         return Cache::get('branches');
     }

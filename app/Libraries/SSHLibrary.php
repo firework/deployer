@@ -2,21 +2,27 @@
 
 namespace App\Libraries;
 
-use Log;
 use SSH;
-use App\DeployOutputs;
 
 class SSHLibrary
 {
-    public static function runDeploy($deploy, $deploy_commands){
 
-        SSH::into($deploy->server)->run($deploy_commands, function($line) use ($deploy) {
-            $deployOutput = new DeployOutputs();
-            $deployOutput->output = $line;
-            $deployOutput->created_at = date('Y-m-d G:i:s');
-            $deploy->outputs()->save($deployOutput);
-            Log::info($line.PHP_EOL);
-        });
+    private static $server;
 
+    public static function server($server){
+        static::$server = $server;
+    }
+
+    public static function run(array $deploy_commands, callable $callback = null){
+
+        if(!isset(static::$server)){
+            static::$server = config('remote.default');
+        }
+
+        $path = config('remote.connections')[static::$server]['path'];
+
+        array_unshift($deploy_commands , 'cd '. $path);
+
+        SSH::into(static::$server)->run($deploy_commands, $callback);
     }
 }

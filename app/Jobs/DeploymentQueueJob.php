@@ -9,7 +9,6 @@ use App\Libraries\SSHLibrary;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use SSH;
 use Log;
 use File;
 
@@ -17,16 +16,16 @@ class DeploymentQueueJob extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
-    protected $deploy_id;
+    protected $deploy;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($deploy_id)
+    public function __construct($deploy)
     {
-        $this->deploy_id = $deploy_id;
+        $this->deploy = $deploy;
     }
 
     /**
@@ -38,9 +37,9 @@ class DeploymentQueueJob extends Job implements ShouldQueue
     {
         Log::info("Handling queue...");
 
-        $deploy = Deploy::find($this->deploy_id);
+        $deploy = $this->deploy;
 
-        $deploy_commands = File::get( base_path() . '/deploy_command' );
+        $deploy_commands = File::get( base_path() . '/storage/app/deploy_command' );
         $deploy_commands = explode(PHP_EOL, $deploy_commands);
 
         foreach ($deploy_commands as $key => &$deploy_command) {
@@ -49,16 +48,24 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server, $deploy_command);
         }
 
-        SSHLibrary::runDeploy($deploy, $deploy_commands);
+        SSHLibrary::server($deploy->server);
 
-        $deploy->status = "sucess";
-        $deploy->save();
+        SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
+            $deployOutput = new DeployOutputs();
+            $deployOutput->output = $line.PHP_EOL;
+            $deployOutput->created_at = date('Y-m-d G:i:s');
+            $deploy->outputs()->save($deployOutput);
+            Log::info($line.PHP_EOL);
+        });
+
+
+        $this->deploy->status = "success";
+        $this->deploy->save();
     }
 
-    private function failed()
+    public function failed()
     {
-        $deploy = Deploy::find($this->deploy_id);
-        $deploy->status = "error";
-        $deploy->save();
+        $this->deploy->status = "error";
+        $this->deploy->save();
     }
 }

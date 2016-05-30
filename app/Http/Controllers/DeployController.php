@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Deploy;
-use App\DeployOutputs;
 use App\Jobs\DeploymentQueueJob;
 use Illuminate\Http\Request;
 use App\Libraries\GitLibrary;
@@ -12,7 +11,6 @@ use App\Libraries\GitLibrary;
 use App\Http\Requests;
 use Log;
 use Session;
-use Config;
 use File;
 use Cache;
 
@@ -21,15 +19,10 @@ class DeployController extends Controller
 
     public function index()
     {
-    	$branches = [];
-    	$servers = [];
+        $branches = GitLibrary::branches();
+        $servers = array_keys(config('remote.connections'));
 
-    	$connections = Config::get('remote.connections');
-    	foreach ($connections as $key => $value) {
-    		$servers[] = $key;
-    	}
-
-        return view('main', ['branches' => GitLibrary::branches(), 'servers' => $servers]);
+        return view('main', compact('branches', 'servers'));
     }
 
     public function deployIt(Request $request)
@@ -39,17 +32,17 @@ class DeployController extends Controller
         $deploy->branch = $request->input('branch');
         $deploy->save();
 
-    	$this->dispatch(new DeploymentQueueJob($deploy->id));
+    	$this->dispatch(new DeploymentQueueJob($deploy));
     	return redirect('/status');
     }
 
     public function deployCommand(Request $request){
-    	$commands = File::get( base_path() . '/deploy_command' );
+    	$commands = File::get( base_path() . '/storage/app/deploy_command' );
     	return view('command', ['commands' => $commands]);
     }
 
     public function saveCommand(Request $request){
-        $commands = File::put( base_path() . '/deploy_command',  $request->input('command'));
+        $commands = File::put( base_path() . '/storage/app/deploy_command',  $request->input('command'));
         return redirect('/command');
     }
 
