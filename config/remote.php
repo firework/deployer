@@ -36,6 +36,7 @@ return [
             'keyphrase' => '',
             'agent'     => '',
             'timeout'   => 30,
+            'path' => '/vagrant',
         ],
         'staging' => [
             'host'      => 'localhost',
@@ -46,6 +47,7 @@ return [
             'keyphrase' => '',
             'agent'     => '',
             'timeout'   => 30,
+            'path' => '/vagrant',
         ],
         'dev' => [
             'host'      => 'localhost',
@@ -56,6 +58,7 @@ return [
             'keyphrase' => '',
             'agent'     => '',
             'timeout'   => 30,
+            'path' => '/vagrant',
         ],
     ],
 

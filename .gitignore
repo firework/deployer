@@ -1,6 +1,6 @@
-/vendor
-/node_modules
-/public/storage
+vendor
+node_modules
+public/storage
 Homestead.yaml
 Homestead.json
 .env
@@ -12,7 +12,6 @@ composer.lock
 .DS_Store
 Thumbs.db
 
-deploy_command
 resources/assets/bower_components
-/public/vendor
-/public/css
+public/vendor
+public/css
