@@ -9,7 +9,7 @@ class GitLibrary
 {
     public static function branches()
     {
-        // if(!Cache::has('branches')){
+        if(!Cache::has('branches')){
 
             SSHLibrary::run(['git fetch origin -p']);
 
@@ -20,7 +20,7 @@ class GitLibrary
 
                 Cache::put('branches', $branches, 1);
             });
-        // }
+        }
 
         return Cache::get('branches');
     }

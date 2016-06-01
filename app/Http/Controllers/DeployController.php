@@ -10,9 +10,7 @@ use App\Libraries\GitLibrary;
 
 use App\Http\Requests;
 use Log;
-use Session;
-use File;
-use Cache;
+use Storage;
 
 class DeployController extends Controller
 {
@@ -37,12 +35,18 @@ class DeployController extends Controller
     }
 
     public function deployCommand(Request $request){
-    	$commands = File::get( base_path() . '/storage/app/deploy_command' );
-    	return view('command', ['commands' => $commands]);
+
+        $commands = '';
+
+        if(Storage::exists('deploy_command')){
+            $commands = Storage::get('deploy_command');
+        }
+
+    	return view('command', compact('commands'));
     }
 
     public function saveCommand(Request $request){
-        $commands = File::put( base_path() . '/storage/app/deploy_command',  $request->input('command'));
+        $commands = Storage::put('deploy_command', $request->input('command'));
         return redirect('/command');
     }
 

@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
-use File;
+use Storage;
 
 class DeploymentQueueJob extends Job implements ShouldQueue
 {
@@ -38,29 +38,43 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         Log::info("Handling queue...");
 
         $deploy = $this->deploy;
+        $deploy_commands = '';
 
-        $deploy_commands = File::get( base_path() . '/storage/app/deploy_command' );
-        $deploy_commands = explode(PHP_EOL, $deploy_commands);
+        if(Storage::exists('deploy_command')){
+            $deploy_commands = Storage::get('deploy_command');
+            $deploy_commands = explode(PHP_EOL, $deploy_commands);
 
-        foreach ($deploy_commands as $key => &$deploy_command) {
-            $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
-            $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
-            $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server, $deploy_command);
+            foreach ($deploy_commands as $key => &$deploy_command) {
+                $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
+                $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
+                $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server, $deploy_command);
+            }
+
+            SSHLibrary::server($deploy->server);
+
+            SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
+                $deployOutput = new DeployOutputs();
+                $deployOutput->output = $line.PHP_EOL;
+                $deployOutput->created_at = date('Y-m-d G:i:s');
+                $deploy->outputs()->save($deployOutput);
+                Log::info($line.PHP_EOL);
+            });
+
+            $deploy->status = "success";
+            $deploy->save();
+
+        } else {
+
+            $deployOutput = new DeployOutputs();
+            $deployOutput->created_at = date('Y-m-d G:i:s');
+            $deployOutput->output = "No command lines found.";
+
+            $deploy->outputs()->save($deployOutput);
+            $deploy->status = 'error';
+            $deploy->save();
+
         }
 
-        SSHLibrary::server($deploy->server);
-
-        SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
-            $deployOutput = new DeployOutputs();
-            $deployOutput->output = $line.PHP_EOL;
-            $deployOutput->created_at = date('Y-m-d G:i:s');
-            $deploy->outputs()->save($deployOutput);
-            Log::info($line.PHP_EOL);
-        });
-
-
-        $this->deploy->status = "success";
-        $this->deploy->save();
     }
 
     public function failed()
