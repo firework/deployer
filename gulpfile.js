@@ -14,23 +14,19 @@ var elixir = require('laravel-elixir');
 elixir(function(mix) {
 
 	var paths = {
-		'bootstrap': './resources/assets/bower_components/bootstrap/dist/',
-		'jquery': './resources/assets/bower_components/jquery/dist/',
-	}
+		'mdl': './node_modules/material-design-lite',
+	};
 
-    mix.copy(
-            paths.bootstrap + 'css/bootstrap.min.css',
-            'public/vendor/bootstrap/css/bootstrap.min.css'
-        ).copy(
-            paths.bootstrap + 'fonts/**',
-            'public/vendor/bootstrap/fonts'
-        ).copy(
-            paths.bootstrap + 'js/bootstrap.min.js',
-            'public/vendor/bootstrap/js/bootstrap.min.js'
-        ).copy(
-            paths.jquery + 'jquery.min.js',
-            'public/vendor/jquery/jquery.min.js'
-        );
+	mix.sass('app.scss');
 
-    mix.sass('app.scss');
+	mix.scripts([
+		paths.mdl + '/material.min.js',
+	], './public/js/vendors.js');
+
+
+	mix.copy(paths.mdl + '/src/images/**', './public/img');
+
+	mix.browserSync({
+	   proxy: 'deployer.app'
+   });
 });
