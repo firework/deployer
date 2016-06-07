@@ -6,7 +6,7 @@ use App\Deploy;
 use App\Jobs\DeploymentQueueJob;
 use Illuminate\Http\Request;
 use App\Libraries\GitLibrary;
-
+use App\Server;
 
 use App\Http\Requests;
 use Log;
@@ -17,20 +17,20 @@ class DeployController extends Controller
 
     public function index()
     {
-        $branches = GitLibrary::branches();
-        $servers = array_keys(config('remote.connections'));
+        $branches = [];
+        $servers =  Server::all();
+
+        if($servers->count() > 0){
+            $branches = GitLibrary::branches();
+        }
 
         return view('main', compact('branches', 'servers'));
     }
 
     public function deployIt(Request $request)
     {
-    	$deploy = new Deploy;
-        $deploy->server = $request->input('server');
-        $deploy->branch = $request->input('branch');
-        $deploy->save();
-
-    	$this->dispatch(new DeploymentQueueJob($deploy));
+        $deploy = Deploy::create($request->all());
+        $this->dispatch(new DeploymentQueueJob($deploy));
     	return redirect('/status');
     }
 
@@ -52,8 +52,9 @@ class DeployController extends Controller
 
     public function status(Request $request)
     {
-        $deploys = Deploy::with('outputs')->orderBy('updated_at', 'desc')->get();
+        $deploys = Deploy::with(['outputs', 'server'])->orderBy('updated_at', 'desc')->get();
+
         Log::info($deploys);
-        return view('status', ['deploys' => $deploys]);
+        return view('status', compact('deploys'));
     }
 }
