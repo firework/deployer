@@ -47,7 +47,7 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             foreach ($deploy_commands as $key => &$deploy_command) {
                 $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
                 $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
-                $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server, $deploy_command);
+                $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
             }
 
             SSHLibrary::server($deploy->server);

@@ -3,6 +3,8 @@
 namespace App\Libraries;
 
 use SSH;
+use Config;
+use App\Server;
 
 class SSHLibrary
 {
@@ -10,19 +12,31 @@ class SSHLibrary
     private static $server;
 
     public static function server($server){
+
         static::$server = $server;
+
+        Config::set('remote.connections.'.$server->name, [
+            'host' => $server->host,
+            'username' => $server->username,
+            'password' => $server->password,
+            'key' => '/home/vagrant/.ssh/id_rsa',
+            'keytext' => '',
+            'keyphrase' => '',
+            'agent' => '',
+            'timeout' => 30,
+            'path' => $server->path
+        ]);
     }
 
     public static function run(array $deploy_commands, callable $callback = null){
 
         if(!isset(static::$server)){
-            static::$server = config('remote.default');
+            static::server(Server::all()->first());
         }
 
-        $path = config('remote.connections')[static::$server]['path'];
-
+        $path = static::$server->path;
         array_unshift($deploy_commands , 'cd '. $path);
 
-        SSH::into(static::$server)->run($deploy_commands, $callback);
+        SSH::into(static::$server->name)->run($deploy_commands, $callback);
     }
 }

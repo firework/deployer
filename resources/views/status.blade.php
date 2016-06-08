@@ -16,10 +16,10 @@
                 <tbody>
                     @foreach ($deploys as $deploy)
                         <tr>
-                            <td class="mdl-data-table__cell--non-numeric">{{$deploy->server}}</td>
-                            <td class="mdl-data-table__cell--non-numeric">{{$deploy->branch}}</td>
-                            <td class="mdl-data-table__cell--non-numeric">{{$deploy->created_at->format('d/m/Y H:i:s')}}</td>
-                            <td class="mdl-data-table__cell--non-numeric">{{$deploy->updated_at->format('d/m/Y H:i:s')}}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ $deploy->server ? $deploy->server->name : $deploy->serverWithTrashed->name }}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ $deploy->branch }}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ $deploy->created_at->format('d/m/Y H:i:s') }}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ $deploy->updated_at->format('d/m/Y H:i:s') }}</td>
                             <td class="mdl-data-table__cell--non-numeric">
                                 @if(! $deploy->outputs->isEmpty())
                                     <div class="code">

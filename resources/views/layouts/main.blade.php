@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Fire Blaster</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="/css/app.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
 </head>
@@ -19,9 +19,10 @@
                 <div class="mdl-layout-spacer"></div>
                 @if (!Auth::guest())
                     <nav class="mdl-navigation mdl-layout--large-screen-only">
-                        <a class="mdl-navigation__link" href="/">Home</a>
-                        <a class="mdl-navigation__link" href="/command">Commands</a>
-                        <a class="mdl-navigation__link" href="/status">Status</a>
+                        <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
+                        <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
+                        <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
+                        <a class="mdl-navigation__link" href="{{ route('status') }}">Status</a>
                         <a class="mdl-navigation__link" href="/logout">Logout</a>
                     </nav>
                 @endif
@@ -32,9 +33,10 @@
             <div class="mdl-layout__drawer mdl-layout--small-screen-only">
                 <span class="mdl-layout-title">Menu</span>
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="/">Home</a>
-                    <a class="mdl-navigation__link" href="/command">Commands</a>
-                    <a class="mdl-navigation__link" href="/status">Status</a>
+                    <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
+                    <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
+                    <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
+                    <a class="mdl-navigation__link" href="{{ route('status') }}">Status</a>
                     <a class="mdl-navigation__link" href="/logout">Logout</a>
                 </nav>
             </div>
@@ -45,6 +47,6 @@
         </main>
     </div>
 
-    <script src="js/vendors.js"></script>
+    <script src="/js/vendors.js"></script>
 </body>
 </html>
