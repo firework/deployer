@@ -7,7 +7,7 @@
 			<h1 class="mdl-typography--headline">Deployer</h1>
 
 			@if($servers->count() > 0)
-				<form method="POST" action="deploy">
+				<form method="POST" action="{{ route('deploy') }}">
 					{{ csrf_field() }}
 
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width">

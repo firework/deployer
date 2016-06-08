@@ -27,7 +27,7 @@ class ServerController extends Controller
         return redirect('server');
     }
 
-    public function edit($server)
+    public function edit(Server $server)
     {
         return view('server.form', compact('server'));
     }
@@ -39,7 +39,7 @@ class ServerController extends Controller
         return redirect('server');
     }
 
-    public function destroy($server)
+    public function destroy(Server $server)
     {
         $server->delete();
         return redirect('server');

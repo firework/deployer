@@ -53,7 +53,6 @@ class DeployController extends Controller
     public function status(Request $request)
     {
         $deploys = Deploy::with(['outputs', 'server'])->orderBy('updated_at', 'desc')->get();
-
         Log::info($deploys);
         return view('status', compact('deploys'));
     }

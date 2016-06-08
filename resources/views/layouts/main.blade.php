@@ -19,10 +19,10 @@
                 <div class="mdl-layout-spacer"></div>
                 @if (!Auth::guest())
                     <nav class="mdl-navigation mdl-layout--large-screen-only">
-                        <a class="mdl-navigation__link" href="/">Home</a>
-                        <a class="mdl-navigation__link" href="/server">Servers</a>
-                        <a class="mdl-navigation__link" href="/command">Commands</a>
-                        <a class="mdl-navigation__link" href="/status">Status</a>
+                        <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
+                        <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
+                        <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
+                        <a class="mdl-navigation__link" href="{{ route('status') }}">Status</a>
                         <a class="mdl-navigation__link" href="/logout">Logout</a>
                     </nav>
                 @endif
@@ -33,10 +33,10 @@
             <div class="mdl-layout__drawer mdl-layout--small-screen-only">
                 <span class="mdl-layout-title">Menu</span>
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="/">Home</a>
-                    <a class="mdl-navigation__link" href="/server">Servers</a>
-                    <a class="mdl-navigation__link" href="/command">Commands</a>
-                    <a class="mdl-navigation__link" href="/status">Status</a>
+                    <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
+                    <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
+                    <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
+                    <a class="mdl-navigation__link" href="{{ route('status') }}">Status</a>
                     <a class="mdl-navigation__link" href="/logout">Logout</a>
                 </nav>
             </div>

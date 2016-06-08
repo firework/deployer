@@ -26,12 +26,10 @@ class CreateServersTable extends Migration
         Schema::table('deploy', function ($table){
             $table->dropColumn('server');
             $table->integer('server_id')->unsigned()->after('id');
-
             $table->foreign('server_id')->references('id')->on('servers');
         });
 
         Schema::rename('deploy', 'deploys');
-
     }
 
     /**
