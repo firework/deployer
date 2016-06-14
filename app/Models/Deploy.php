@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,12 +16,12 @@ class Deploy extends Model
 
     public function outputs()
     {
-        return $this->hasMany('App\Model\DeployOutputs');
+        return $this->hasMany('App\Models\DeployOutputs');
     }
 
     public function server()
     {
-        return $this->belongsTo('App\Model\Server');
+        return $this->belongsTo('App\Models\Server');
     }
 
     public function user()

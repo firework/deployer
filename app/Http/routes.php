@@ -8,10 +8,10 @@ Route::group(['middleware'=> 'auth'], function(){
     Route::post('save_command', ['as' => 'save.command', 'uses' => 'DeployController@saveCommand']);
     Route::get('deploys', ['as' => 'deploys', 'uses' => 'DeployController@deploys']);
 
-    Route::model('deploy', 'App\Model\Deploy');
+    Route::model('deploy', 'App\Models\Deploy');
     Route::get('deploy/{deploy}/status', ['as' => 'deploy.status', 'uses' => 'DeployController@deployStatus']);
 
-    Route::model('server', 'App\Model\Server');
+    Route::model('server', 'App\Models\Server');
     Route::get('server/{server}/destroy', ['as' => 'server.destroy', 'uses' => 'ServerController@destroy']);
     Route::resource('server', 'ServerController', ['except' => ['show', 'destroy']]);
 });

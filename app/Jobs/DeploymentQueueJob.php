@@ -2,22 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Model\Deploy;
-use App\Model\DeployOutputs;
-
-use App\Jobs\Job;
-
-use App\Libraries\SSHLibrary;
-
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-
-use Illuminate\Contracts\Queue\ShouldQueue;
-
 use Log;
 use Storage;
-
+use App\Jobs\Job;
 use Carbon\Carbon;
+use App\Models\Deploy;
+use App\Models\DeployOutputs;
+use App\Libraries\SSHLibrary;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 
 class DeploymentQueueJob extends Job implements ShouldQueue
 {

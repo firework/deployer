@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Model\Server;
+use App\Models\Server;
 use Illuminate\Http\Request;
 use App\Http\Requests\ServerRequest;
 

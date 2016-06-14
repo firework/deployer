@@ -26,6 +26,6 @@ class User extends Authenticatable
 
     public function deploys()
     {
-        return $this->hasMany('App\Model\Deploy');
+        return $this->hasMany('App\Models\Deploy');
     }
 }

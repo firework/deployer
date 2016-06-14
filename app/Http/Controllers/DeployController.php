@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Log;
 use Storage;
-use App\Model\Deploy;
-use App\Model\Server;
-use App\Http\Requests;
+use App\Models\Deploy;
+use App\Models\Server;
 use App\Http\Requests\RunDeployRequest;
 use Illuminate\Http\Request;
 use App\Libraries\GitLibrary;
@@ -38,7 +37,7 @@ class DeployController extends Controller
 
         $this->dispatch(new DeploymentQueueJob($deploy));
 
-    	return view('deploy_status', compact('deploy'));
+    	return redirect()->route('deploy.status', [$deploy->id]);
     }
 
     public function deployCommand(Request $request){
