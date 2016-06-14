@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Deploy;
-use App\Jobs\DeploymentQueueJob;
-use Illuminate\Http\Request;
-use App\Libraries\GitLibrary;
-use App\Server;
-
-use App\Http\Requests;
 use Log;
 use Storage;
+use App\Model\Deploy;
+use App\Model\Server;
+use App\Http\Requests;
+use App\Http\Requests\RunDeployRequest;
+use Illuminate\Http\Request;
+use App\Libraries\GitLibrary;
+use App\Jobs\DeploymentQueueJob;
 
 class DeployController extends Controller
 {
@@ -27,11 +27,18 @@ class DeployController extends Controller
         return view('main', compact('branches', 'servers'));
     }
 
-    public function deployIt(Request $request)
+    public function deployIt(RunDeployRequest $request)
     {
-        $deploy = Deploy::create($request->all());
+        $deploy = Deploy::create([
+            'server_id' => $request->server_id,
+            'user_id'   => $request->user()->id,
+            'branch'    => $request->branch,
+            'status'    => 'todo'
+        ]);
+
         $this->dispatch(new DeploymentQueueJob($deploy));
-    	return redirect('/status');
+
+    	return view('deploy_status', compact('deploy'));
     }
 
     public function deployCommand(Request $request){
@@ -50,10 +57,14 @@ class DeployController extends Controller
         return redirect('/command');
     }
 
-    public function status(Request $request)
+    public function deploys(Request $request)
     {
-        $deploys = Deploy::with(['outputs', 'server'])->orderBy('updated_at', 'desc')->get();
-        Log::info($deploys);
-        return view('status', compact('deploys'));
+        $servers = Server::withTrashed()->get();
+        return view('deploys', compact('servers'));
+    }
+
+    public function deployStatus(Deploy $deploy)
+    {
+        return view('deploy_status', compact('deploy'));
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
+use App\Model\Server;
+use Illuminate\Http\Request;
 use App\Http\Requests\ServerRequest;
-use App\Server;
 
 class ServerController extends Controller
 {

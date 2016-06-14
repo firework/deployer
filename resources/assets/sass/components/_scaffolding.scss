@@ -50,3 +50,29 @@
 .w100 {
     width: 100%;
 }
+
+.simple-message {
+    text-align: center;
+}
+
+.status {
+    padding: 5px 8px;
+    display: inline-block;
+    font-size: 13px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 3px;
+    line-height: 1em;
+
+    &.status-success {
+        background-color: #00ff11;
+    }
+
+    &.status-error {
+        background-color: #ff0000;
+    }
+
+    &.status-canceled {
+        background-color: #ff8800;
+    }
+}

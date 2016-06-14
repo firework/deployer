@@ -1,12 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
 class DeployOutputs extends Model
 {
     protected $table = 'deploy_output';
+    
     public $timestamps = false;
 
     public function deploy()

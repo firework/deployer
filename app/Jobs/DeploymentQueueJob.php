@@ -2,15 +2,22 @@
 
 namespace App\Jobs;
 
-use App\Deploy;
-use App\DeployOutputs;
+use App\Model\Deploy;
+use App\Model\DeployOutputs;
+
 use App\Jobs\Job;
+
 use App\Libraries\SSHLibrary;
+
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+
 use Illuminate\Contracts\Queue\ShouldQueue;
+
 use Log;
 use Storage;
+
+use Carbon\Carbon;
 
 class DeploymentQueueJob extends Job implements ShouldQueue
 {
@@ -40,7 +47,7 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $deploy = $this->deploy;
         $deploy_commands = '';
 
-        if(Storage::exists('deploy_command')){
+        if(Storage::exists('deploy_command') && strlen(Storage::get('deploy_command')) > 0){
             $deploy_commands = Storage::get('deploy_command');
             $deploy_commands = explode(PHP_EOL, $deploy_commands);
 
@@ -55,31 +62,30 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
                 $deployOutput = new DeployOutputs();
                 $deployOutput->output = $line.PHP_EOL;
-                $deployOutput->created_at = date('Y-m-d G:i:s');
                 $deploy->outputs()->save($deployOutput);
                 Log::info($line.PHP_EOL);
             });
 
             $deploy->status = "success";
-            $deploy->save();
 
         } else {
 
             $deployOutput = new DeployOutputs();
-            $deployOutput->created_at = date('Y-m-d G:i:s');
             $deployOutput->output = "No command lines found.";
 
             $deploy->outputs()->save($deployOutput);
             $deploy->status = 'error';
-            $deploy->save();
 
         }
 
+        $deploy->finished_at = Carbon::now();
+        $deploy->save();
     }
 
     public function failed()
     {
         $this->deploy->status = "error";
+        $this->deploy->finished_at = Carbon::now();
         $this->deploy->save();
     }
 }

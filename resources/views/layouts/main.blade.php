@@ -22,7 +22,7 @@
                         <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
                         <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
                         <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
-                        <a class="mdl-navigation__link" href="{{ route('status') }}">Status</a>
+                        <a class="mdl-navigation__link" href="{{ route('deploys') }}">Deploys</a>
                         <a class="mdl-navigation__link" href="/logout">Logout</a>
                     </nav>
                 @endif
@@ -36,7 +36,7 @@
                     <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
                     <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
                     <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
-                    <a class="mdl-navigation__link" href="{{ route('status') }}">Status</a>
+                    <a class="mdl-navigation__link" href="{{ route('deploys') }}">Deploys</a>
                     <a class="mdl-navigation__link" href="/logout">Logout</a>
                 </nav>
             </div>
@@ -47,6 +47,10 @@
         </main>
     </div>
 
-    <script src="/js/vendors.js"></script>
+    @yield('body')
+
+    @section('scripts')
+        <script src="/js/vendors.js"></script>
+    @show
 </body>
 </html>
