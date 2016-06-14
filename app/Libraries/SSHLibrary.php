@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 use SSH;
 use Config;
-use App\Server;
+use App\Models\Server;
 
 class SSHLibrary
 {

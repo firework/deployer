@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +19,11 @@ class Server extends Model
 
     public function deploys()
     {
-        return $this->hasMany(Deploy::class);
+        return $this->hasMany(Deploy::class)->orderBy('updated_at', 'desc');
+    }
+
+    public function getNameForIdAttribute()
+    {
+        return str_slug($this->name);
     }
 }

@@ -6,6 +6,7 @@
     "reinstall": "rm -rf node_modules/ && npm i --no-progress"
   },
   "dependencies": {
+    "dialog-polyfill": "^0.4.3",
     "gulp": "^3.9.1",
     "laravel-elixir": "^6.0.0-2",
     "material-design-lite": "^1.1.3"
