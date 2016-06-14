@@ -16,17 +16,17 @@ class Deploy extends Model
 
     public function outputs()
     {
-        return $this->hasMany('App\Models\DeployOutputs');
+        return $this->hasMany(DeployOutputs::class);
     }
 
     public function server()
     {
-        return $this->belongsTo('App\Models\Server');
+        return $this->belongsTo(Server::class);
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function serverWithTrashed()

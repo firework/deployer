@@ -19,7 +19,7 @@ class Server extends Model
 
     public function deploys()
     {
-        return $this->hasMany('App\Models\Deploy')->orderBy('updated_at', 'desc');
+        return $this->hasMany(Deploy::class)->orderBy('updated_at', 'desc');
     }
 
     public function getNameForIdAttribute()

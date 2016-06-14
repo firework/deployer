@@ -12,6 +12,6 @@ class DeployOutputs extends Model
 
     public function deploy()
     {
-        return $this->belongsTo('App\Models\Deploy');
+        return $this->belongsTo(Deploy::class);
     }
 }
