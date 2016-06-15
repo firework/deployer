@@ -19,11 +19,11 @@ class SSHLibrary
             'host' => $server->host,
             'username' => $server->username,
             'password' => $server->password,
-            'key' => '/home/vagrant/.ssh/id_rsa',
-            'keytext' => '',
-            'keyphrase' => '',
-            'agent' => '',
-            'timeout' => 30,
+            'key' => $server->key,
+            'keytext' => $server->keytext,
+            'keyphrase' => $server->keyphrase,
+            'agent' => $server->agent,
+            'timeout' => $server->timeout,
             'path' => $server->path
         ]);
     }
@@ -31,7 +31,7 @@ class SSHLibrary
     public static function run(array $deploy_commands, callable $callback = null){
 
         if(!isset(static::$server)){
-            static::server(Server::all()->first());
+            static::server(Server::latest()->first());
         }
 
         $path = static::$server->path;
