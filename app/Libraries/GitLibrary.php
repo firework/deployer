@@ -10,7 +10,6 @@ class GitLibrary
     public static function branches()
     {
         if(!Cache::has('branches')){
-
             SSHLibrary::run(['git fetch origin -p']);
 
             $commands = ['git branch -r | grep origin | grep -v HEAD | awk -F/ \'{print $2}\''];
