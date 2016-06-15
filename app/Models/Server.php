@@ -14,7 +14,7 @@ class Server extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name', 'host', 'username', 'password', 'path'
+        'name', 'host', 'username', 'password', 'path', 'key', 'keytext', 'keyphrase', 'timeout', 'agent'
     ];
 
     public function deploys()

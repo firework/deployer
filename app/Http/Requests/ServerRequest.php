@@ -22,7 +22,8 @@ class ServerRequest extends Request
             'name'     => 'required|max:255',
             'host'     => 'required',
             'username' => 'required',
-            'path'     => 'required'
+            'path'     => 'required',
+            'timeout'  => 'required|integer'
         ];
     }
 }
