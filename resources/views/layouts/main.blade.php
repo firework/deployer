@@ -21,7 +21,7 @@
                     <nav class="mdl-navigation mdl-layout--large-screen-only">
                         <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
                         <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
-                        <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
+                        <a class="mdl-navigation__link" href="{{ route('task.index') }}">Tasks</a>
                         <a class="mdl-navigation__link" href="{{ route('deploys') }}">Deploys</a>
                         <a class="mdl-navigation__link" href="/logout">Logout</a>
                     </nav>
@@ -35,7 +35,7 @@
                 <nav class="mdl-navigation">
                     <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
                     <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
-                    <a class="mdl-navigation__link" href="{{ route('command') }}">Commands</a>
+                    <a class="mdl-navigation__link" href="{{ route('task.index') }}">Tasks</a>
                     <a class="mdl-navigation__link" href="{{ route('deploys') }}">Deploys</a>
                     <a class="mdl-navigation__link" href="/logout">Logout</a>
                 </nav>

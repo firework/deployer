@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Log;
-use Storage;
 use App\Models\Deploy;
 use App\Models\Server;
+use App\Models\Task;
 use App\Http\Requests\RunDeployRequest;
 use Illuminate\Http\Request;
 use App\Libraries\GitLibrary;
@@ -18,18 +17,20 @@ class DeployController extends Controller
     {
         $branches = [];
         $servers =  Server::all();
+        $tasks = Task::all();
 
         if($servers->count() > 0){
             $branches = GitLibrary::branches();
         }
 
-        return view('main', compact('branches', 'servers'));
+        return view('main', compact('branches', 'servers', 'tasks'));
     }
 
     public function deployIt(RunDeployRequest $request)
     {
         $deploy = Deploy::create([
             'server_id' => $request->server_id,
+            'task_id'   => $request->task_id,
             'user_id'   => $request->user()->id,
             'branch'    => $request->branch,
             'status'    => 'todo'
@@ -38,22 +39,6 @@ class DeployController extends Controller
         $this->dispatch(new DeploymentQueueJob($deploy));
 
     	return redirect()->route('deploy.status', [$deploy->id]);
-    }
-
-    public function deployCommand(Request $request){
-
-        $commands = '';
-
-        if(Storage::exists('deploy_command')){
-            $commands = Storage::get('deploy_command');
-        }
-
-    	return view('command', compact('commands'));
-    }
-
-    public function saveCommand(Request $request){
-        $commands = Storage::put('deploy_command', $request->input('command'));
-        return redirect('/command');
     }
 
     public function deploys(Request $request)

@@ -24,23 +24,26 @@
 		  formDeploy.submit();
 		});
 	</script>
-	
+
 @endsection
 
 @section('content')
 	<div class="mdl-grid">
 		<div class="mdl-layout-spacer"></div>
+
 		<div class="mdl-cell mdl-cell--4-col">
 			<h1 class="mdl-typography--headline">Deployer</h1>
-			@if($servers->count() > 0)
+			@if($servers->count() > 0 && $tasks->count() > 0)
 
 				@if (count($errors) > 0)
 	                <div class="alert alert-danger">
 	                    <ul>
 							@if($errors->has('server_id'))
-								<li>Please, select a server</li>
+								<li>Please, select a server.</li>
 							@elseif($errors->has('branch'))
-								<li>Please, select a branch</li>
+								<li>Please, select a branch.</li>
+							@elseif($errors->has('task_id'))
+								<li>Please, select a task.</li>
 							@endif
 	                    </ul>
 	                </div>
@@ -59,8 +62,18 @@
 						</select>
 
 						<label class="mdl-textfield__label" for="server">Server</label>
+					</div>
 
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width">
+						<select name="task_id" class="mdl-textfield__input">
+							<option disabled selected>Select a Task</option>
 
+							@foreach ($tasks as $task)
+								<option value="{{ $task->id }}">{{ $task->name }}</option>
+							@endforeach
+						</select>
+
+						<label class="mdl-textfield__label" for="server">Task</label>
 					</div>
 
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width">
@@ -80,7 +93,12 @@
 
 			@else
 				<h3>Welcome </h3>
-				<p> Please, first register a server clicking <a href="{{ route('server.create')}}">here</a> </p>
+				@if($servers->count() <= 0)
+					<p> Please, first register a server clicking <a href="{{ route('server.create')}}">here.</a> </p>
+				@elseif($tasks->count() <= 0)
+					<p> Please, first register a task clicking <a href="{{ route('task.create')}}">here</a>.</p>
+				@endif
+
 			@endif
 		</div>
 		<div class="mdl-layout-spacer"></div>

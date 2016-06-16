@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class RunDeployRequest extends Request
+class TaskRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class RunDeployRequest extends Request
     public function rules()
     {
         return [
-            'server_id' => 'required',
-            'task_id'   => 'required',
-            'branch'    => 'required'
+            'name'     => 'required|max:255',
+            'commands' => 'required'
         ];
     }
 }

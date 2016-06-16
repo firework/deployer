@@ -4,7 +4,7 @@
 
     <div class="mdl-grid">
         <div class="mdl-layout-spacer"></div>
-        
+
         <div class="mdl-cell mdl-cell--6-col">
             <h3 class="mdl-typography--headline">Deploy number {{$deploy->id}}</h3>
 
@@ -35,7 +35,9 @@
                     </span>
 
                     <span class="mdl-list__item-secondary-content">
-                        <span>{{ $deploy->status }}</span>
+                        <span class="status status-{{ $deploy->status }}">
+                            {{ ucfirst($deploy->status) }}
+                        </span>
                     </span>
                 </li>
             </ul>

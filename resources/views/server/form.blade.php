@@ -105,7 +105,7 @@
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('keytext') ? ' is-invalid' : '' }}" >
-                                    <textarea class="mdl-textfield__input" id="keytext" name="keytext"  rows= "3" value="{{ $server->keytext }}"></textarea>
+                                    <textarea class="mdl-textfield__input" id="keytext" name="keytext"  rows= "3">{{ $server->keytext }}</textarea>
                                     <label class="mdl-textfield__label" for="keytext">Key Text</label>
                                 </div>
                             </div>
