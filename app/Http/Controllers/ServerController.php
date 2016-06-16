@@ -23,7 +23,13 @@ class ServerController extends Controller
 
     public function store(ServerRequest $request)
     {
-        Server::create($request->all());
+        $server = new Server($request->all());
+
+        if(intval($server->timeout) < 30){
+            $server->timeout = 30;
+        }
+
+        Server::create($server);
         return redirect('server');
     }
 
