@@ -25,11 +25,12 @@ class ServerController extends Controller
     {
         $server = new Server($request->all());
 
-        if(intval($server->timeout) < 30){
+        if ($server->timeout < 30) {
             $server->timeout = 30;
         }
 
-        Server::create($server);
+        $server->save();
+
         return redirect('server');
     }
 
