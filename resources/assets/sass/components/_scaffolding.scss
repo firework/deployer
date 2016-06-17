@@ -41,14 +41,14 @@
     font-family: monospace;
     border-radius: 3px;
     text-shadow: 1px 1px 1px #555;
-
-    & > br:last-child {
-        display: none;
-    }
 }
 
 .w100 {
     width: 100%;
+}
+
+.text-right{
+    text-align: right;
 }
 
 .simple-message {
@@ -73,6 +73,10 @@
     }
 
     &.status-canceled {
-        background-color: #ff8800;
+        background-color: #FF5722;
+    }
+
+    &.status-running {
+        background-color: #FFC107;
     }
 }

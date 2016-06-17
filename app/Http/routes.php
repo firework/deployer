@@ -14,4 +14,8 @@ Route::group(['middleware'=> 'auth'], function(){
     Route::model('server', 'App\Models\Server');
     Route::get('server/{server}/destroy', ['as' => 'server.destroy', 'uses' => 'ServerController@destroy']);
     Route::resource('server', 'ServerController', ['except' => ['show', 'destroy']]);
+
+    Route::model('task', 'App\Models\Task');
+    Route::get('task/{task}/destroy', ['as' => 'task.destroy', 'uses' => 'TaskController@destroy']);
+    Route::resource('task', 'TaskController', ['except' => ['show', 'destroy']]);
 });

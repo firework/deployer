@@ -3,10 +3,8 @@
 namespace App\Jobs;
 
 use Log;
-use Storage;
 use App\Jobs\Job;
 use Carbon\Carbon;
-use App\Models\Deploy;
 use App\Models\DeployOutputs;
 use App\Libraries\SSHLibrary;
 use Illuminate\Queue\SerializesModels;
@@ -40,38 +38,29 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         Log::info("Handling queue...");
 
         $deploy = $this->deploy;
-        $deploy_commands = '';
+        $deploy->status = 'running';
+        $deploy->save();
 
-        if(Storage::exists('deploy_command') && strlen(Storage::get('deploy_command')) > 0){
-            $deploy_commands = Storage::get('deploy_command');
-            $deploy_commands = explode(PHP_EOL, $deploy_commands);
+        $deploy_commands = $deploy->task->commands;
 
-            foreach ($deploy_commands as $key => &$deploy_command) {
-                $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
-                $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
-                $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
-            }
+        $deploy_commands = explode(PHP_EOL, $deploy_commands);
 
-            SSHLibrary::server($deploy->server);
-
-            SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
-                $deployOutput = new DeployOutputs();
-                $deployOutput->output = $line.PHP_EOL;
-                $deploy->outputs()->save($deployOutput);
-                Log::info($line.PHP_EOL);
-            });
-
-            $deploy->status = "success";
-
-        } else {
-
-            $deployOutput = new DeployOutputs();
-            $deployOutput->output = "No command lines found.";
-
-            $deploy->outputs()->save($deployOutput);
-            $deploy->status = 'error';
-
+        foreach ($deploy_commands as $key => &$deploy_command) {
+            $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
+            $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
+            $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
         }
+
+        SSHLibrary::server($deploy->server);
+
+        SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
+            $deployOutput = new DeployOutputs();
+            $deployOutput->output = $line.PHP_EOL;
+            $deploy->outputs()->save($deployOutput);
+            Log::info($line.PHP_EOL);
+        });
+
+        $deploy->status = "success";
 
         $deploy->finished_at = Carbon::now();
         $deploy->save();

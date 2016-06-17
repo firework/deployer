@@ -11,7 +11,7 @@ class Deploy extends Model
     protected $dates = ['finished_at'];
 
     protected $fillable = [
-        'user_id', 'server_id', 'branch', 'status', 'finished_at'
+        'user_id', 'server_id', 'task_id', 'branch', 'status', 'finished_at'
     ];
 
     public function outputs()
@@ -24,6 +24,11 @@ class Deploy extends Model
         return $this->belongsTo(Server::class);
     }
 
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -34,6 +39,10 @@ class Deploy extends Model
         return $this->server()->withTrashed();
     }
 
+    public function taskWithTrashed()
+    {
+        return $this->task()->withTrashed();
+    }
 
     public function getAllOutputsAttribute()
     {

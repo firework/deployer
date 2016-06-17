@@ -18,6 +18,7 @@
                             <table class="mdl-data-table mdl-js-data-table w100">
                                 <thead>
                                     <tr>
+                                        <th class="mdl-data-table__cell--non-numeric">Task Name</th>
                                         <th class="mdl-data-table__cell--non-numeric">Branch</th>
                                         <th class="mdl-data-table__cell--non-numeric">Executed by</th>
                                         <th class="mdl-data-table__cell--non-numeric">Status</th>
@@ -29,6 +30,8 @@
                                 <tbody>
                                     @foreach ($server->deploys as $deploy)
                                         <tr>
+                                            <td class="mdl-data-table__cell--non-numeric">{{ $deploy->taskWithTrashed ? $deploy->taskWithTrashed->name : '' }}</td>
+
                                             <td class="mdl-data-table__cell--non-numeric">{{ $deploy->branch }}</td>
                                             <td class="mdl-data-table__cell--non-numeric">{{ $deploy->user->name }}</td>
                                             <td class="mdl-data-table__cell--non-numeric ">
@@ -54,7 +57,7 @@
                                 </tbody>
                             </table>
                         @else
-                            <h6 class="simple-message">No deploys founded for this server.</h6>
+                            <h6 class="simple-message">No deploys found for this server.</h6>
                         @endif
                     </div>
                 @endforeach
