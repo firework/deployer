@@ -35,8 +35,8 @@
 			<h1 class="mdl-typography--headline">Deployer</h1>
 			@if($servers->count() > 0 && $tasks->count() > 0)
 
-				@if (count($errors) > 0)
-	                <div class="alert alert-danger">
+				@if ($errors->count() > 0)
+					<div class="alert alert-danger">
 	                    <ul>
 							@if($errors->has('server_id'))
 								<li>Please, select a server.</li>
@@ -93,9 +93,9 @@
 
 			@else
 				<h3>Welcome </h3>
-				@if($servers->count() <= 0)
+				@if($servers->count() < 1)
 					<p> Please, first register a server clicking <a href="{{ route('server.create')}}">here.</a> </p>
-				@elseif($tasks->count() <= 0)
+				@elseif($tasks->count() < 1)
 					<p> Please, first register a task clicking <a href="{{ route('task.create')}}">here</a>.</p>
 				@endif
 

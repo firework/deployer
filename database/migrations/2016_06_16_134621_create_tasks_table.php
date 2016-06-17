@@ -21,7 +21,7 @@ class CreateTasksTable extends Migration
         });
 
         Schema::table('deploys', function($table){
-            $table->integer('task_id')->unsigned()->nullable();;
+            $table->integer('task_id')->unsigned()->nullable();
             $table->foreign('task_id')->references('id')->on('tasks');
         });
 
