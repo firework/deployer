@@ -2,17 +2,17 @@
 
 @section('content')
     <div class="container">
-        @if($server->exists)
-            <form action="{{ route('server.update', $server) }}" method="post">
-                {{ method_field('PUT') }}
-            @else
-                <form action="{{ route('server.store') }}" method="post">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--6-col-desktop mdl-cell--3-offset-desktop">
+
+                @if($server->exists)
+                    <form action="{{ route('server.update', $server) }}" method="post">
+                        {{ method_field('PUT') }}
+                @else
+                    <form action="{{ route('server.store') }}" method="post">
                 @endif
+                        {{ csrf_field() }}
 
-                {{ csrf_field() }}
-                <div class="mdl-grid">
-
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         @if($server->exists)
                             <h3 class="mdl-typography--headline">Edit the server data.</h3>
                         @else
@@ -34,9 +34,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--6-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('username') ? ' is-invalid' : '' }}">
@@ -52,9 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--6-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('timeout') ? ' is-invalid' : '' }}" >
@@ -70,9 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--6-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('path') ? ' is-invalid' : '' }}">
@@ -88,9 +82,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width{{ $errors->first('keyphrase') ? ' is-invalid' : '' }}" >
@@ -99,9 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('keytext') ? ' is-invalid' : '' }}" >
@@ -110,18 +100,16 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset">
                         <div class="mdl-grid">
-                            <div class="mdl-cell--6-col">
+                            <div class="mdl-cell--12-col text-right">
                                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submmit">
                                     Save
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
-    @endsection
+@endsection
