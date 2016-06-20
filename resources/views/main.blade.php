@@ -4,104 +4,91 @@
 	@parent
 
 	<script type="text/javascript">
-		var dialog = document.querySelector('dialog'),
-			showDialogButton = document.querySelector('#fire'),
-			formDeploy = document.querySelector('form');
+	var dialog = document.querySelector('dialog'),
+	showDialogButton = document.querySelector('#fire'),
+	formDeploy = document.querySelector('form');
 
-		if (! dialog.showModal) {
-		  dialogPolyfill.registerDialog(dialog);
-		}
+	if (! dialog.showModal) {
+		dialogPolyfill.registerDialog(dialog);
+	}
 
-		showDialogButton.addEventListener('click', function() {
-		  dialog.showModal();
-		});
+	showDialogButton.addEventListener('click', function() {
+		dialog.showModal();
+	});
 
-		dialog.querySelector('.close').addEventListener('click', function() {
-		  dialog.close();
-		});
+	dialog.querySelector('.close').addEventListener('click', function() {
+		dialog.close();
+	});
 
-		dialog.querySelector('.accept').addEventListener('click', function() {
-		  formDeploy.submit();
-		});
+	dialog.querySelector('.accept').addEventListener('click', function() {
+		formDeploy.submit();
+	});
 	</script>
 
 @endsection
 
 @section('content')
-	<div class="mdl-grid">
-		<div class="mdl-layout-spacer"></div>
+	<div class="container">
+		<div class="mdl-grid">
+			<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-offset-desktop">
+				@if($servers->count() > 0 && $tasks->count() > 0)
+					<form method="POST" action="{{ route('deploy') }}" dialog="dialogFire">
+						{{ csrf_field() }}
 
-		<div class="mdl-cell mdl-cell--4-col">
-			<h1 class="mdl-typography--headline">Deployer</h1>
-			@if($servers->count() > 0 && $tasks->count() > 0)
+						<div class="mdl-grid">
+							<h1 class="mdl-typography--headline">Deployer</h1>
 
-				@if ($errors->count() > 0)
-					<div class="alert alert-danger">
-	                    <ul>
-							@if($errors->has('server_id'))
-								<li>Please, select a server.</li>
-							@elseif($errors->has('branch'))
-								<li>Please, select a branch.</li>
-							@elseif($errors->has('task_id'))
-								<li>Please, select a task.</li>
-							@endif
-	                    </ul>
-	                </div>
-	            @endif
+							<div class="mdl-cell mdl-cell--12-col">
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('server_id') ? 'is-invalid' : ''}}">
+									<select name="server_id" class="mdl-textfield__input">
+										<option disabled selected>Select a Server</option>
 
-				<form method="POST" action="{{ route('deploy') }}" dialog="dialogFire">
-					{{ csrf_field() }}
+										@foreach ($servers as $server)
+											<option value="{{ $server->id }}">{{ $server->name }}</option>
+										@endforeach
+									</select>
 
-					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width">
-						<select name="server_id" class="mdl-textfield__input">
-							<option disabled selected>Select a Server</option>
+									<label class="mdl-textfield__label" for="server">Server</label>
+								</div>
 
-							@foreach ($servers as $server)
-								<option value="{{ $server->id }}">{{ $server->name }}</option>
-							@endforeach
-						</select>
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('task_id') ? 'is-invalid' : ''}}">
+									<select name="task_id" class="mdl-textfield__input">
+										<option disabled selected>Select a Task</option>
 
-						<label class="mdl-textfield__label" for="server">Server</label>
-					</div>
+										@foreach ($tasks as $task)
+											<option value="{{ $task->id }}">{{ $task->name }}</option>
+										@endforeach
+									</select>
 
-					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width">
-						<select name="task_id" class="mdl-textfield__input">
-							<option disabled selected>Select a Task</option>
+									<label class="mdl-textfield__label" for="server">Task</label>
+								</div>
 
-							@foreach ($tasks as $task)
-								<option value="{{ $task->id }}">{{ $task->name }}</option>
-							@endforeach
-						</select>
+								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('branch') ? 'is-invalid' : ''}}">
+									<select name="branch" class="mdl-textfield__input">
+										<option disabled selected>Select a Branch</option>
 
-						<label class="mdl-textfield__label" for="server">Task</label>
-					</div>
+										@foreach ($branches as $branch)
+											<option>{{ $branch }}</option>
+										@endforeach
+									</select>
 
-					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width">
-						<select name="branch" class="mdl-textfield__input">
-							<option disabled selected>Select a Branch</option>
+									<label class="mdl-textfield__label" for="branch">Branch</label>
+								</div>
 
-							@foreach ($branches as $branch)
-								<option>{{ $branch }}</option>
-							@endforeach
-						</select>
-
-						<label class="mdl-textfield__label" for="branch">Branch</label>
-					</div>
-
-					<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="fire">Fire!</button>
-				</form>
-
-			@else
-				<h3>Welcome </h3>
-				@if($servers->count() < 1)
-					<p> Please, first register a server clicking <a href="{{ route('server.create')}}">here.</a> </p>
-				@elseif($tasks->count() < 1)
-					<p> Please, first register a task clicking <a href="{{ route('task.create')}}">here</a>.</p>
+								<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="fire">Fire!</button>
+							</div>
+						</div>
+					</form>
+				@else
+					<h3>Welcome </h3>
+					@if($servers->count() < 1)
+						<p> Please, first register a server clicking <a href="{{ route('server.create')}}">here.</a> </p>
+					@elseif($tasks->count() < 1)
+						<p> Please, first register a task clicking <a href="{{ route('task.create')}}">here</a>.</p>
+					@endif
 				@endif
-
-			@endif
+			</div>
 		</div>
-		<div class="mdl-layout-spacer"></div>
 	</div>
 @endsection
 
