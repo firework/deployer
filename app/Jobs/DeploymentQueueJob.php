@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Redis;
 use Log;
 use App\Jobs\Job;
 use Carbon\Carbon;
@@ -57,6 +58,15 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deployOutput = new DeployOutputs();
             $deployOutput->output = $line.PHP_EOL;
             $deploy->outputs()->save($deployOutput);
+
+            Redis::publish('output-channel', json_encode([
+                'deploy' => $deploy->id,
+                'data' => [
+                    'status' => 'running',
+                    'output' => $deployOutput->output
+                ]
+            ]));
+
             Log::info($line.PHP_EOL);
         });
 
@@ -64,6 +74,14 @@ class DeploymentQueueJob extends Job implements ShouldQueue
 
         $deploy->finished_at = Carbon::now();
         $deploy->save();
+
+        Redis::publish('output-channel', json_encode([
+            'deploy' => $deploy->id,
+            'data' => [
+                'status' => 'success',
+                'output' => ''
+            ]
+        ]));
     }
 
     public function failed()

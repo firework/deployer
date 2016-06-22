@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Redis;
 use App\Models\Deploy;
 use App\Models\Server;
 use App\Models\Task;
@@ -23,7 +24,7 @@ class DeployController extends Controller
             $branches = GitLibrary::branches();
         }
 
-        return view('main', compact('branches', 'servers', 'tasks'));
+        return view('home', compact('branches', 'servers', 'tasks'));
     }
 
     public function deployIt(RunDeployRequest $request)

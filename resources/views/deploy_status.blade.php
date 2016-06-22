@@ -35,23 +35,28 @@
                                 </span>
 
                                 <span class="mdl-list__item-secondary-content">
-                                    <span class="status status-{{ $deploy->status }}">
+                                    <span class="status status-{{ $deploy->status }}" id="status">
                                         {{ ucfirst($deploy->status) }}
                                     </span>
                                 </span>
                             </li>
                         </ul>
 
-                        @if(! $deploy->outputs->isEmpty())
-                            <div class="code w100">
-                                @foreach ($deploy->outputs as $output)
-                                    {!! nl2br($output->output) !!}
-                                @endforeach
-                            </div>
-                        @endif
+                        <div class="code w100" id="output">
+                            @foreach ($deploy->outputs as $output)
+                                {!! nl2br($output->output) !!}
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+@endsection
+
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="/js/pages/deploy_status.js"></script>
+    
 @endsection

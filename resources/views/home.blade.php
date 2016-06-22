@@ -2,29 +2,7 @@
 
 @section('scripts')
 	@parent
-
-	<script type="text/javascript">
-	var dialog = document.querySelector('dialog'),
-	showDialogButton = document.querySelector('#fire'),
-	formDeploy = document.querySelector('form');
-
-	if (! dialog.showModal) {
-		dialogPolyfill.registerDialog(dialog);
-	}
-
-	showDialogButton.addEventListener('click', function() {
-		dialog.showModal();
-	});
-
-	dialog.querySelector('.close').addEventListener('click', function() {
-		dialog.close();
-	});
-
-	dialog.querySelector('.accept').addEventListener('click', function() {
-		formDeploy.submit();
-	});
-	</script>
-
+	<script type="text/javascript" src="/js/pages/home.js"></script>
 @endsection
 
 @section('content')
@@ -94,15 +72,13 @@
 
 @section('body')
 	<dialog class="mdl-dialog">
-		{{-- <h4 class="mdl-dialog__title">Are you sure?</h4> --}}
+	    <div class="mdl-dialog__content">
+	        <p>Are you sure?</p>
+	    </div>
 
-		<div class="mdl-dialog__content">
-			<p>Are you sure?</p>
-		</div>
-
-		<div class="mdl-dialog__actions">
-			<button type="button" class="mdl-button accept">Yes</button>
-			<button type="button" class="mdl-button close">Cancel</button>
-		</div>
+	    <div class="mdl-dialog__actions">
+	        <button type="button" class="mdl-button accept">Yes</button>
+	        <button type="button" class="mdl-button close">Cancel</button>
+	    </div>
 	</dialog>
 @endsection
