@@ -16,12 +16,14 @@
                 <form method="POST" action="{{ url('/password/email') }}">
                     {{ csrf_field() }}
 
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="email" id="email">
-                        <label class="mdl-textfield__label" for="sample3">E-Mail Address</label>
-                    </div>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->has('email') ? 'is-invalid' : '' }}">
+                        <input class="mdl-textfield__input " type="email" id="email" name="email">
+                        <label class="mdl-textfield__label" for="email">E-mail Address</label>
 
-                    <br>
+                        @if ($errors->has('email'))
+                            <span class="mdl-textfield__error">{{ $errors->first('email') }}</span>
+                        @endif
+                    </div>
 
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submmit">
                         Reset

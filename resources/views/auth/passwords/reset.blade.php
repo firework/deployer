@@ -2,68 +2,46 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-offset-desktop">
+            <h3 class="mdl-typography--headline">Reset Password</h3>
+            <form action="{{ url('/password/reset') }}" method="POST">
+                {{ csrf_field() }}
 
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/reset') }}">
-                        {{ csrf_field() }}
+                <input type="hidden" name="token" value="{{ $token }}">
 
-                        <input type="hidden" name="token" value="{{ $token }}">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->has('email') ? 'is-invalid' : '' }}">
+                    <input class="mdl-textfield__input " type="email" id="email" name="email" value="{{ $email or old('email') }}">
+                    <label class="mdl-textfield__label" for="email">E-mail Address</label>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ $email or old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password_confirmation">
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-refresh"></i>Reset Password
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    @if ($errors->has('email'))
+                        <span class="mdl-textfield__error">{{ $errors->first('email') }}</span>
+                    @endif
                 </div>
-            </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->has('password') ? 'is-invalid' : '' }}">
+                    <input class="mdl-textfield__input " type="password" id="password" name="password">
+                    <label class="mdl-textfield__label" for="password">Password</label>
+
+                    @if ($errors->has('password'))
+                        <span class="mdl-textfield__error">{{ $errors->first('password') }}</span>
+                    @endif
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}">
+                    <input class="mdl-textfield__input " type="password" id="password_confirmation" name="password_confirmation">
+                    <label class="mdl-textfield__label" for="password_confirmation">Confirm Password</label>
+
+                    @if ($errors->has('password_confirmation'))
+                        <span class="mdl-textfield__error">{{ $errors->first('password_confirmation') }}</span>
+                    @endif
+                </div>
+
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Login
+                </button>
+
+            </form>
         </div>
     </div>
 </div>

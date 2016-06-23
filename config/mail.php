@@ -55,7 +55,8 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    // 'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => env('MAIL_ADDRESS', 'noreply@deployer.app'), 'name' => env('MAIL_NAME', 'Deployer Mailbot')],
 
     /*
     |--------------------------------------------------------------------------
