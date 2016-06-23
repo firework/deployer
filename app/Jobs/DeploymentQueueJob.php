@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Log;
+use App\Events\DeployOutputsEvent;
 use App\Jobs\Job;
 use Carbon\Carbon;
 use App\Models\DeployOutputs;
@@ -57,13 +58,17 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deployOutput = new DeployOutputs();
             $deployOutput->output = $line.PHP_EOL;
             $deploy->outputs()->save($deployOutput);
+
+            event(new DeployOutputsEvent($deployOutput));
+
             Log::info($line.PHP_EOL);
         });
 
-        $deploy->status = "success";
-
+        $deploy->status = 'success';
         $deploy->finished_at = Carbon::now();
         $deploy->save();
+
+        event(new DeployOutputsEvent($deploy->outputs->first()));
     }
 
     public function failed()

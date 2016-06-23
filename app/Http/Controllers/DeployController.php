@@ -23,7 +23,7 @@ class DeployController extends Controller
             $branches = GitLibrary::branches();
         }
 
-        return view('main', compact('branches', 'servers', 'tasks'));
+        return view('home', compact('branches', 'servers', 'tasks'));
     }
 
     public function deployIt(RunDeployRequest $request)
