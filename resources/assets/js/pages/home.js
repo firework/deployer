@@ -1,6 +1,6 @@
 var dialog = document.querySelector('dialog'),
-showDialogButton = document.querySelector('#fire'),
-formDeploy = document.querySelector('form');
+    showDialogButton = document.querySelector('#fire'),
+    formDeploy = document.querySelector('form');
 
 if (! dialog.showModal) {
     dialogPolyfill.registerDialog(dialog);

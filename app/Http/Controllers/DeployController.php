@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Redis;
 use App\Models\Deploy;
 use App\Models\Server;
 use App\Models\Task;

@@ -1,8 +1,11 @@
 var pathArray = window.location.pathname.split('/');
 var socket = io('http://'+ window.location.host +':3000');
 
-socket.on('output-channel:' + pathArray[2], function(data){
-    document.getElementById('output').innerHTML += data.output.replace(/(?:\r\n|\r|\n)/g, '<br/>');
-    document.getElementById('status').className = 'status status-' + data.status;
-    document.getElementById('status').innerHTML = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+var divOutput =  document.getElementById('output');
+var spanStatus = document.getElementById('status');
+
+socket.on('deploy-outputs.' + pathArray[2], function(data){
+    divOutput.innerHTML += data.output;
+    spanStatus.className = 'status status-' + data.deploy.status;
+    spanStatus.innerHTML = data.deploy.status.charAt(0).toUpperCase() + data.deploy.status.slice(1);
 });
