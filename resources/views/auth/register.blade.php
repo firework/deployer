@@ -38,7 +38,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}">
                         <input class="mdl-textfield__input" type="password" id="password_confirmation" name="password_confirmation">
-                        <label class="mdl-textfield__label" for="password_confirmation">E-mail Address</label>
+                        <label class="mdl-textfield__label" for="password_confirmation">Confirm Password</label>
 
                         @if ($errors->has('password_confirmation'))
                             <span class="mdl-textfield__error">{{ $errors->first('password_confirmation') }}</span>
