@@ -8,6 +8,7 @@ use App\Jobs\Job;
 use Carbon\Carbon;
 use App\Models\DeployOutputs;
 use App\Libraries\SSHLibrary;
+use App\Libraries\SlackLibrary;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,6 +43,10 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $deploy->status = 'running';
         $deploy->save();
 
+        $url = route('deploy.status', $deploy->id);
+        $slack = new SlackLibrary(":rocket: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* started, by *{$deploy->user->name}* at *{$deploy->created_at->format('d/m/Y H:i:s')}*. <{$url}|See status here>.");
+        $slack->fire();
+
         $deploy_commands = $deploy->task->commands;
 
         $deploy_commands = explode(PHP_EOL, $deploy_commands);
@@ -68,6 +73,9 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $deploy->finished_at = Carbon::now();
         $deploy->save();
 
+        $slack->setMessage(":+1: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* finished, by *{$deploy->user->name}* at *{$deploy->finished_at->format('d/m/Y H:i:s')}*. <{$url}|See status here>.");
+        $slack->fire();
+
         event(new DeployOutputsEvent($deploy->outputs->first()));
     }
 
@@ -76,5 +84,9 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $this->deploy->status = "error";
         $this->deploy->finished_at = Carbon::now();
         $this->deploy->save();
+
+        $url = route('deploy.status', $deploy->id);
+        $slack = new SlackLibrary(":-1: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* failed, by *{$deploy->user->name}* at *{$deploy->updated_at->format('d/m/Y H:i:s')}*. <{}|See status here>.");
+        $slack->fire();
     }
 }
