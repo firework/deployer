@@ -18,11 +18,11 @@ class SlackLibrary
     public function fire()
     {
         $data = json_encode(array(
-                'channel'       =>  '#' . env('SLACK_CHANNEL', 'general'),
-                'username'      =>  env('SLACK_BOTNAME', 'deployer'),
-                'text'          =>  $this->message,
-                'icon_emoji'    =>  env('SLACK_ICON', ':rocket:')
-            ));
+            'channel'    => '#' . env('SLACK_CHANNEL', 'general'),
+            'username'   => env('SLACK_BOTNAME', 'deployer'),
+            'text'       => $this->message,
+            'icon_emoji' => env('SLACK_ICON', ':rocket:')
+        ));
 
         $ch = curl_init(env('SLACK_WEBHOOK'));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -31,5 +31,4 @@ class SlackLibrary
         $result = curl_exec($ch);
         curl_close($ch);
     }
-
 }
