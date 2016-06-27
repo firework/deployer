@@ -40,7 +40,7 @@
                                                         {{ ucfirst($deploy->status) }}
                                                     </span>
                                                 </td>
-                                                <td class="mdl-data-table__cell--non-numeric">{{ $deploy->finished_at ? $deploy->finished_at->format('d/m/Y H:i:s') : '' }}</td>
+                                                <td class="mdl-data-table__cell--non-numeric">{{ $deploy->finished_at ? $deploy->finished_at : '' }}</td>
                                                 <td class="mdl-data-table__cell--non-numeric">
                                                     @if(! $deploy->outputs->isEmpty())
                                                         <div class="code">
