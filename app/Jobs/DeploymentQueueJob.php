@@ -81,9 +81,11 @@ class DeploymentQueueJob extends Job implements ShouldQueue
 
     public function failed()
     {
-        $this->deploy->status = "error";
-        $this->deploy->finished_at = Carbon::now();
-        $this->deploy->save();
+        $deploy = $this->deploy;
+        
+        $deploy->status = "error";
+        $deploy->finished_at = Carbon::now();
+        $deploy->save();
 
         $url = route('deploy.status', $deploy->id);
         $slack = new SlackLibrary(":-1: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* failed, by *{$deploy->user->name}* at *{$deploy->updated_at}*. <{$url}|See status here>.");
