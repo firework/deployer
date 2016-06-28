@@ -11,4 +11,4 @@ redis.on('pmessage', function(subscribed, channel, message) {
     io.emit(channel, message.data);
 });
 
-server.listen(3000);
+server.listen(2095);
