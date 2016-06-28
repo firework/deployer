@@ -16,7 +16,12 @@ elixir(function(mix) {
 		paths.socketio + '/socket.io.js'
 	], './public/js/vendors.js');
 
-
+	mix.version([
+		'css/app.css',
+		'js/vendors.js',
+		'js/pages/**'
+	]);
+	
 	mix
 		.copy(paths.mdl + '/src/images/**', './public/img')
 		.copy('resources/assets/js/pages/**', 'public/js/pages/')

@@ -57,6 +57,6 @@
 
 @section('scripts')
     @parent
-    <script type="text/javascript" src="/js/pages/deploy_status.js"></script>
-    
+    <script type="text/javascript" src="{{ elixir('js/pages/deploy_status.js') }}"></script>
+
 @endsection
