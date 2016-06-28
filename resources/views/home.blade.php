@@ -2,7 +2,7 @@
 
 @section('scripts')
 	@parent
-	<script type="text/javascript" src="/js/pages/home.js"></script>
+	<script type="text/javascript" src="{{ elixir('js/pages/home.js') }}"></script>
 @endsection
 
 @section('content')

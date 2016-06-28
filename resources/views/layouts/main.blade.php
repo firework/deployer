@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Fire Blaster</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="{{ elixir('css/app.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
 </head>
@@ -50,7 +50,7 @@
     @yield('body')
 
     @section('scripts')
-        <script src="/js/vendors.js"></script>
+        <script src="{{ elixir('js/vendors.js') }}"></script>
     @show
 </body>
 </html>

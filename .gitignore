@@ -11,6 +11,7 @@ composer.lock
 .DS_Store
 Thumbs.db
 
+public/build
 public/img
 public/storage
 public/vendor
