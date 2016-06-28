@@ -13,19 +13,19 @@ elixir(function(mix) {
 	mix.scripts([
 		paths.mdl + '/material.min.js',
 		paths.dialog + '/dialog-polyfill.js',
-		paths.socketio + '/socket.io.js'
-	], './public/js/vendors.js');
+	], './public/js/vendor/global.js');
 
-	mix.version([
-		'css/app.css',
-		'js/vendors.js',
-		'js/pages/**'
-	]);
-	
 	mix
 		.copy(paths.mdl + '/src/images/**', './public/img')
 		.copy('resources/assets/js/pages/**', 'public/js/pages/')
+		.copy(paths.socketio + '/socket.io.js', 'public/js/vendor/socket.io.js')
 	;
+
+	mix.version([
+		'css/app.css',
+		'js/pages/**',
+		'js/vendor/**',
+	]);
 
 	mix.browserSync({
 	   proxy: 'deployer.app'
