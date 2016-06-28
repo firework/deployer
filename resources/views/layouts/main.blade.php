@@ -50,7 +50,7 @@
     @yield('body')
 
     @section('scripts')
-        <script src="{{ elixir('js/vendors.js') }}"></script>
+        <script src="{{ elixir('js/vendor/global.js') }}"></script>
     @show
 </body>
 </html>
