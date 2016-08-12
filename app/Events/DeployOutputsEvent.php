@@ -41,10 +41,8 @@ class DeployOutputsEvent extends Event implements ShouldBroadcastNow
     public function broadcastWith()
     {
         $deploy = $this->deployOutputs->deploy;
-
-        return [
-            'deploy' => $deploy,
-            'output' => $deploy->status != 'success' ? nl2br($this->deployOutputs->output) : ''
-        ];
+        $output = $deploy->status != 'success' ? nl2br($this->deployOutputs->output) : '';
+        
+        return compact('deploy', 'output');
     }
 }
