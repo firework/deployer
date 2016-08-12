@@ -61,7 +61,7 @@ class DeploymentQueueJob extends Job implements ShouldQueue
 
         SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
             $deployOutput = new DeployOutputs();
-            $deployOutput->output = $line.PHP_EOL;
+            $deployOutput->output = mb_convert_encoding($line.PHP_EOL, 'UTF-8');
             $deploy->outputs()->save($deployOutput);
 
             event(new DeployOutputsEvent($deployOutput));
