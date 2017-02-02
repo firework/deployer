@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Server;
+use App\Models\SlackIntegration;
 use Illuminate\Http\Request;
 use App\Http\Requests\ServerRequest;
 
@@ -18,7 +19,8 @@ class ServerController extends Controller
     public function create()
     {
         $server = new Server();
-        return view('server.form', compact('server'));
+        $integrations = SlackIntegration::all()->lists('name', 'id');
+        return view('server.form', compact('server', 'integrations'));
     }
 
     public function store(ServerRequest $request)
@@ -30,19 +32,24 @@ class ServerController extends Controller
         }
 
         $server->save();
+        $server->integrations()->sync($request->get('integrations', []));
 
         return redirect('server');
     }
 
     public function edit(Server $server)
     {
-        return view('server.form', compact('server'));
+        $integrations = SlackIntegration::all()->lists('name', 'id');
+
+        return view('server.form', compact('server', 'integrations'));
     }
 
     public function update(ServerRequest $request, Server $server)
     {
-        $server->fill($request->all());
-        $server->save();
+        $server->save($request->all());
+
+        $server->integrations()->sync($request->get('integrations', []));
+
         return redirect('server');
     }
 

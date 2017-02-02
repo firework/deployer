@@ -18,6 +18,7 @@ class ServersTableSeeder extends Seeder
             'username' => 'vagrant',
             'password' => '',
             'path' => '/vagrant',
+            'key' => '/home/vagrant/.ssh/id_rsa'
         ]);
     }
 }

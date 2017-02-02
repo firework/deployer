@@ -44,8 +44,35 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $deploy->save();
 
         $url = route('deploy.status', $deploy->id);
-        $slack = new SlackLibrary(":rocket: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* started, by *{$deploy->user->name}* at *{$deploy->created_at}*. <{$url}|See status here>.");
-        $slack->fire();
+
+        foreach($deploy->server->integrations as $integration) {
+            SlackLibrary::fire($integration->toArray(), null, [ [
+                'color' => '#0099d7',
+                'text' => "<{$url}|See status here>",
+                'title' => 'New build started! :rocket:',
+                'footer' => "<!date^{$deploy->created_at->timestamp}^{date_num} - {time}|{$deploy->created_at}>",
+                'fields' => [
+                    [
+                        'title' => 'User',
+                        'value' => $deploy->user->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Task',
+                        'value' => $deploy->task->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Server',
+                        'value' => $deploy->server->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Branch',
+                        'value' => $deploy->branch,
+                        'short' => true
+                    ]
+                ],
+                'mrkdwn_in' => [ 'text' ]
+            ] ]);
+        }
 
         $deploy_commands = $deploy->task->commands;
 
@@ -73,8 +100,34 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         $deploy->finished_at = Carbon::now();
         $deploy->save();
 
-        $slack->setMessage(":+1: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* finished, by *{$deploy->user->name}* at *{$deploy->finished_at}*. <{$url}|See status here>.");
-        $slack->fire();
+        foreach($deploy->server->integrations as $integration) {
+            SlackLibrary::fire($integration->toArray(), null, [ [
+                'color' => 'good',
+                'text' => "<{$url}|See status here>",
+                'title' => 'Woohoo! Build success :white_check_mark:',
+                'footer' => "<!date^{$deploy->finished_at->timestamp}^{date_num} - {time}|{$deploy->finished_at}>",
+                'fields' => [
+                    [
+                        'title' => 'User',
+                        'value' => $deploy->user->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Task',
+                        'value' => $deploy->task->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Server',
+                        'value' => $deploy->server->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Branch',
+                        'value' => $deploy->branch,
+                        'short' => true
+                    ]
+                ],
+                'mrkdwn_in' => [ 'text' ]
+            ] ]);
+        }
 
         event(new DeployOutputsEvent($deploy->outputs->first()));
     }
@@ -82,13 +135,40 @@ class DeploymentQueueJob extends Job implements ShouldQueue
     public function failed()
     {
         $deploy = $this->deploy;
-        
+
         $deploy->status = "error";
         $deploy->finished_at = Carbon::now();
         $deploy->save();
 
         $url = route('deploy.status', $deploy->id);
-        $slack = new SlackLibrary(":-1: *[{$deploy->server->name}/{$deploy->branch}] {$deploy->task->name}* failed, by *{$deploy->user->name}* at *{$deploy->updated_at}*. <{$url}|See status here>.");
-        $slack->fire();
+
+        foreach($deploy->server->integrations as $integration) {
+            SlackLibrary::fire($integration->toArray(), null, [ [
+                'color' => 'danger',
+                'text' => "<{$url}|See status here>",
+                'title' => 'Help! Build failed :x:',
+                'footer' => "<!date^{$deploy->updated_at->timestamp}^{date_num} - {time}|{$deploy->updated_at}>",
+                'fields' => [
+                    [
+                        'title' => 'User',
+                        'value' => $deploy->user->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Task',
+                        'value' => $deploy->task->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Server',
+                        'value' => $deploy->server->name,
+                        'short' => true
+                    ], [
+                        'title' => 'Branch',
+                        'value' => $deploy->branch,
+                        'short' => true
+                    ]
+                ],
+                'mrkdwn_in' => [ 'text' ]
+            ] ]);
+        }
     }
 }

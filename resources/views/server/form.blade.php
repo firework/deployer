@@ -101,6 +101,25 @@
                             </div>
                         </div>
 
+                        @if($integrations->count() > 0)
+                        <div class="mdl-grid">
+                            @foreach($integrations as $id => $integration)
+                                <div class="mdl-cell mdl-cell--4-col">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ $id }}">
+                                        @if ($server->hasIntegration($id))
+                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="integrations[]" checked />
+                                        @else
+                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="integrations[]" />
+                                        @endif
+                                        <span class="mdl-checkbox__label">{{ $integration }}</span>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        @else
+                            <h5 class="simple-message">No integrations found.</h5>
+                        @endif
+
                         <div class="mdl-grid">
                             <div class="mdl-cell--12-col text-right">
                                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submmit">
