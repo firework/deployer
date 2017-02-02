@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use Log;
 use App\Events\DeployOutputsEvent;
 use App\Jobs\Job;
 use Carbon\Carbon;
@@ -37,8 +36,6 @@ class DeploymentQueueJob extends Job implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("Handling queue...");
-
         $deploy = $this->deploy;
         $deploy->status = 'running';
         $deploy->save();
@@ -92,8 +89,6 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deploy->outputs()->save($deployOutput);
 
             event(new DeployOutputsEvent($deployOutput));
-
-            Log::info($line.PHP_EOL);
         });
 
         $deploy->status = 'success';
