@@ -48,7 +48,16 @@
         </main>
     </div>
 
-    @yield('body')
+    <dialog class="mdl-dialog">
+	    <div class="mdl-dialog__content">
+	        <p>Are you sure?</p>
+	    </div>
+
+	    <div class="mdl-dialog__actions">
+	        <button type="button" class="mdl-button accept">Yes</button>
+	        <button type="button" class="mdl-button close">Cancel</button>
+	    </div>
+	</dialog>
 
     @section('scripts')
         <script src="{{ elixir('js/vendor/global.js') }}"></script>
