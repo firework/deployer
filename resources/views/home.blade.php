@@ -18,8 +18,8 @@
 
 							<div class="mdl-cell mdl-cell--12-col">
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('server_id') ? 'is-invalid' : ''}}">
-									<select name="server_id" class="mdl-textfield__input">
-										<option disabled selected>Select a Server</option>
+									<select name="server_id" class="mdl-textfield__input" id="select-server">
+										<option disabled selected value="-1">Select a Server</option>
 
 										@foreach ($servers as $server)
 											<option value="{{ $server->id }}">{{ $server->name }}</option>
@@ -30,8 +30,8 @@
 								</div>
 
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('task_id') ? 'is-invalid' : ''}}">
-									<select name="task_id" class="mdl-textfield__input">
-										<option disabled selected>Select a Task</option>
+									<select name="task_id" class="mdl-textfield__input" id="select-task">
+										<option disabled selected value="-1">Select a Task</option>
 
 										@foreach ($tasks as $task)
 											<option value="{{ $task->id }}">{{ $task->name }}</option>
@@ -42,15 +42,15 @@
 								</div>
 
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('branch') ? 'is-invalid' : ''}}">
-									<select name="branch" class="mdl-textfield__input">
-										<option disabled selected>Select a Branch</option>
-
-										@foreach ($branches as $branch)
-											<option>{{ $branch }}</option>
-										@endforeach
+									<select name="branch" class="mdl-textfield__input" id="select-branch">
+										<option disabled selected value="-1">Select a Branch</option>
 									</select>
 
 									<label class="mdl-textfield__label" for="branch">Branch</label>
+								</div>
+
+								<div id="progress-bar">
+									<div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 								</div>
 
 								<button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="fire">Fire!</button>
