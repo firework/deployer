@@ -1,21 +1,14 @@
-var dialog = document.querySelector('dialog'),
-    showDialogButton = document.querySelector('#fire'),
-    formDeploy = document.querySelector('form');
+(function() {
+    var showDialogButton = document.querySelector('#fire'),
+        formDeploy = document.querySelector('form');
 
-if (! dialog.showModal) {
-    dialogPolyfill.registerDialog(dialog);
-}
+    if (showDialogButton) {
+        var dialog = new DeployerConfirmDialog();
 
-if (showDialogButton) {
-    showDialogButton.addEventListener('click', function() {
-        dialog.showModal();
-    });
-}
-
-dialog.querySelector('.close').addEventListener('click', function() {
-    dialog.close();
-});
-
-dialog.querySelector('.accept').addEventListener('click', function() {
-    formDeploy.submit();
-});
+        showDialogButton.addEventListener('click', function() {
+            dialog.showModal(function() {
+                formDeploy.submit();
+            }.bind(this));
+        }.bind(this));
+    }
+})();

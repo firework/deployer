@@ -1,5 +1,10 @@
 @extends('layouts.main')
 
+@section('scripts')
+	@parent
+	<script type="text/javascript" src="{{ elixir('js/pages/delete_dialog.js') }}"></script>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="mdl-grid">
@@ -45,7 +50,7 @@
                                                 </a>
                                             </td>
                                             <td class="mdl-data-table__cell--non-numeric">
-                                                <a href="{{ route('server.destroy', $server->id) }}" class="mdl-button mdl-js-button mdl-button--icon">
+                                                <a href="{{ route('server.destroy', $server->id) }}" class="mdl-button mdl-js-button mdl-button--icon delete-button">
                                                     <i class="material-icons">delete</i>
                                                 </a>
                                             </td>
