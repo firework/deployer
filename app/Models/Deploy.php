@@ -62,13 +62,12 @@ class Deploy extends Model
 
         if (! $outputs->isEmpty()) {
             $lines = array_filter(explode(PHP_EOL, $outputs->first()->output));
-            $shortOutput = $lines[0];
 
-            if ($outputs->count() > 1) {
-                $lines = array_filter(explode(PHP_EOL, $outputs->last()->output));
-                $shortOutput .= PHP_EOL . '...' . PHP_EOL . end($lines) . PHP_EOL;
-            }else{
-                if(count($lines) > 1){
+            if ($shortOutput = array_get($lines, 0) ) {
+                if ($outputs->count() > 1) {
+                    $lines = array_filter(explode(PHP_EOL, $outputs->last()->output));
+                    $shortOutput .= PHP_EOL . '...' . PHP_EOL . end($lines) . PHP_EOL;
+                } else if (count($lines) > 1) {
                     $shortOutput .= PHP_EOL . '...' . PHP_EOL . end($lines) . PHP_EOL;
                 }
             }
