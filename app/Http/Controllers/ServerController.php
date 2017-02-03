@@ -13,13 +13,16 @@ class ServerController extends Controller
     public function index()
     {
         $servers = Server::all();
+
         return view('server.index', compact('servers'));
     }
 
     public function create()
     {
         $server = new Server();
-        $integrations = SlackIntegration::all()->lists('name', 'id');
+
+        $integrations = SlackIntegration::lists('name', 'id');
+
         return view('server.form', compact('server', 'integrations'));
     }
 
@@ -39,14 +42,14 @@ class ServerController extends Controller
 
     public function edit(Server $server)
     {
-        $integrations = SlackIntegration::all()->lists('name', 'id');
+        $integrations = SlackIntegration::lists('name', 'id');
 
         return view('server.form', compact('server', 'integrations'));
     }
 
     public function update(ServerRequest $request, Server $server)
     {
-        $server->save($request->all());
+        $server->update($request->all());
 
         $server->integrations()->sync($request->get('integrations', []));
 
@@ -56,6 +59,7 @@ class ServerController extends Controller
     public function destroy(Server $server)
     {
         $server->delete();
+
         return redirect('server');
     }
 }

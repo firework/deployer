@@ -25,9 +25,7 @@ class SlackIntegrationController extends Controller
 
     public function store(SlackIntegrationRequest $request)
     {
-        $integration = new SlackIntegration($request->all());
-
-        $integration->save();
+        SlackIntegration::create($request->all());
 
         return redirect('integration');
     }
@@ -39,8 +37,8 @@ class SlackIntegrationController extends Controller
 
     public function update(SlackIntegrationRequest $request, SlackIntegration $integration)
     {
-        $integration->fill($request->all());
-        $integration->save();
+        $integration->update($request->all());
+
         return redirect('integration');
     }
 

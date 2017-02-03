@@ -8,25 +8,27 @@ class SlackLibrary
     public static function fire(array $params, $message = null, $attachments = null)
     {
         $data = [];
-        if (array_get($params, 'icon')) {
-            $data['icon_emoji'] = array_get($params, 'icon');
+
+        if ($icon = array_get($params, 'icon')) {
+            $data['icon_emoji'] = $icon;
         }
-        if (array_get($params, 'channel')) {
-            $data['channel'] = "#" . array_get($params, 'channel');
+
+        if ($channel = array_get($params, 'channel')) {
+            $data['channel'] = "#" . $create;
         }
-        if (array_get($params, 'botname')) {
-            $data['username'] = array_get($params, 'botname');
+
+        if ($botname = array_get($params, 'botname')) {
+            $data['username'] = $botname;
         }
+
         if ($message) {
             $data['text'] = $message;
         }
+
         if ($attachments) {
             $data['attachments'] = $attachments;
         }
 
-        $client = new Client();
-        $result = $client->post(array_get($params, 'webhook'), [
-            'json' => $data
-        ]);
+        $result = with(new Client)->post(array_get($params, 'webhook'), [ 'json' => $data ]);
     }
 }
