@@ -20,6 +20,7 @@
                 @if (!Auth::guest())
                     <nav class="mdl-navigation mdl-layout--large-screen-only">
                         <a class="mdl-navigation__link" href="{{ route('home') }}">Home</a>
+                        <a class="mdl-navigation__link" href="{{ route('integration.index') }}">Integrations</a>
                         <a class="mdl-navigation__link" href="{{ route('server.index') }}">Servers</a>
                         <a class="mdl-navigation__link" href="{{ route('task.index') }}">Tasks</a>
                         <a class="mdl-navigation__link" href="{{ route('deploys') }}">Deploys</a>

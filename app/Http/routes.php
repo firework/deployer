@@ -8,6 +8,10 @@ Route::group(['middleware'=> 'auth'], function(){
     Route::post('save_command', ['as' => 'save.command', 'uses' => 'DeployController@saveCommand']);
     Route::get('deploys', ['as' => 'deploys', 'uses' => 'DeployController@deploys']);
 
+    Route::model('integration', 'App\Models\SlackIntegration');
+    Route::get('integration/{integration}/destroy', ['as' => 'integration.destroy', 'uses' => 'SlackIntegrationController@destroy']);
+    Route::resource('integration', 'SlackIntegrationController', ['except' => ['show', 'destroy']]);
+
     Route::model('deploy', 'App\Models\Deploy');
     Route::get('deploy/{deploy}/status', ['as' => 'deploy.status', 'uses' => 'DeployController@deployStatus']);
 
