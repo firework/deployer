@@ -14,7 +14,7 @@ class SlackLibrary
         }
 
         if ($channel = array_get($params, 'channel')) {
-            $data['channel'] = "#" . $create;
+            $data['channel'] = "#" . $channel;
         }
 
         if ($botname = array_get($params, 'botname')) {
