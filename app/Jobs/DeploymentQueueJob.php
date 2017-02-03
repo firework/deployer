@@ -81,9 +81,7 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
         }
 
-        SSHLibrary::server($deploy->server);
-
-        SSHLibrary::run($deploy_commands, function($line) use ($deploy) {
+        SSHLibrary::run($deploy->server, $deploy_commands, function($line) use ($deploy) {
             $deployOutput = new DeployOutputs();
             $deployOutput->output = mb_convert_encoding($line.PHP_EOL, 'UTF-8');
             $deploy->outputs()->save($deployOutput);

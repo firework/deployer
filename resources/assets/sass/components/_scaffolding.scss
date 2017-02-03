@@ -80,3 +80,21 @@
         background-color: #FFC107;
     }
 }
+
+#progress-bar {
+    margin-bottom: 20px;
+    padding-top: 4px;
+    background-color: #c6cbe9;
+
+    .mdl-progress {
+        display: none;
+    }
+
+    &.is-loading {
+        padding: 0;
+
+        .mdl-progress {
+            display: block;
+        }
+    }
+}

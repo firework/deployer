@@ -7,6 +7,7 @@ use App\Models\Server;
 use App\Models\SlackIntegration;
 use Illuminate\Http\Request;
 use App\Http\Requests\ServerRequest;
+use App\Libraries\GitLibrary;
 
 class ServerController extends Controller
 {
@@ -61,5 +62,10 @@ class ServerController extends Controller
         $server->delete();
 
         return redirect('server');
+    }
+
+    public function branches(Server $server)
+    {
+        return GitLibrary::branches($server);
     }
 }

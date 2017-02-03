@@ -7,7 +7,6 @@ use App\Models\Server;
 use App\Models\Task;
 use App\Http\Requests\RunDeployRequest;
 use Illuminate\Http\Request;
-use App\Libraries\GitLibrary;
 use App\Jobs\DeploymentQueueJob;
 
 class DeployController extends Controller
@@ -15,15 +14,10 @@ class DeployController extends Controller
 
     public function index()
     {
-        $branches = [];
         $servers =  Server::all();
         $tasks = Task::all();
 
-        if($servers->count() > 0){
-            $branches = GitLibrary::branches();
-        }
-
-        return view('home', compact('branches', 'servers', 'tasks'));
+        return view('home', compact('servers', 'tasks'));
     }
 
     public function deployIt(RunDeployRequest $request)

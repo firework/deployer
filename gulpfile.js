@@ -6,6 +6,7 @@ elixir(function(mix) {
 		'mdl': 'node_modules/material-design-lite',
 		'dialog': 'node_modules/dialog-polyfill',
 		'socketio' : 'node_modules/socket.io-client/dist',
+		'axios': 'node_modules/axios/dist'
 	};
 
 	mix.sass('app.scss');
@@ -14,6 +15,7 @@ elixir(function(mix) {
 		paths.mdl + '/material.min.js',
 		paths.dialog + '/dialog-polyfill.js',
 		paths.socketio + '/socket.io.js',
+		paths.axios + '/axios.js',
 		'resources/assets/js/lib/main.js',
 	], 'public/js/vendor/global.js');
 

@@ -6,6 +6,7 @@
     "reinstall": "rm -rf node_modules/ && npm i --no-progress"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "dialog-polyfill": "^0.4.3",
     "ioredis": "^2.2.0",
     "material-design-lite": "^1.1.3",
