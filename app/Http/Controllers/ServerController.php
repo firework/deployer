@@ -68,4 +68,9 @@ class ServerController extends Controller
     {
         return GitLibrary::branches($server);
     }
+
+    public function tasks(Server $server)
+    {
+        return $server->tasks;
+    }
 }

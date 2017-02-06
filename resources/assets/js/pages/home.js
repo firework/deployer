@@ -40,32 +40,47 @@
         });
     }
 
-    function fillBranches(serverId) {
+    function getBranches (serverId) {
+        return axios.get('/server/' + serverId + '/branches');
+    }
+
+    function getTasks (serverId) {
+        return axios.get('/server/' + serverId + '/tasks');
+    }
+
+    function fillBranches (serverId) {
         progressBar.classList.add('is-loading');
+        taskSelect.disabled = true;
         branchSelect.disabled = true;
 
-        axios.get('/server/' + serverId + '/branches')
-            .then(function(response) {
-
+        axios.all([ getBranches(serverId), getTasks(serverId) ])
+            .then(axios.spread(function (branches, tasks) {
                 progressBar.classList.remove('is-loading');
+                var branchesName = branches.data.map(function (branch) {
+                    return { key: branch, value: branch };
+                });
+                parseSelect(branchesName, branchSelect);
+                var tasksName = tasks.data.map(function (task) {
+                    return { key: task.id, value: task.name };
+                });
+                parseSelect(tasksName, taskSelect);
+            }));
+    }
 
-                if(response && response.data) {
-                    var defaultOpt = branchSelect.querySelector("[disabled]");
+    function parseSelect (items, select) {
+        var defaultOpt = select.querySelector("[disabled]");
 
-                    branchSelect.options.length = 0;
+        select.options.length = 0;
 
-                    branchSelect.appendChild(defaultOpt);
+        select.appendChild(defaultOpt);
 
-                    response.data.forEach(function(branch) {
-                        var opt = document.createElement('option');
-                        opt.innerHTML = branch;
-                        opt.value = branch;
-                        branchSelect.appendChild(opt);
-                    });
+        items.forEach(function(item) {
+            var opt = document.createElement('option');
+            opt.innerHTML = item.value;
+            opt.value = item.key;
+            select.appendChild(opt);
+        });
 
-                    branchSelect.disabled = false;
-
-                }
-            });
+        select.disabled = false;
     }
 })();
