@@ -103,6 +103,10 @@
 
                         @if($integrations->count() > 0)
                         <div class="mdl-grid">
+                            <h5>Slack Integrations</h5>
+                        </div>
+
+                        <div class="mdl-grid">
                             @foreach($integrations as $id => $integration)
                                 <div class="mdl-cell mdl-cell--4-col">
                                     <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ $id }}">
@@ -117,7 +121,7 @@
                             @endforeach
                         </div>
                         @else
-                            <h5 class="simple-message">No integrations found.</h5>
+                            <h6 class="simple-message">No integrations found.</h6>
                         @endif
 
                         <div class="mdl-grid">
