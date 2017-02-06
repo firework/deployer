@@ -64,13 +64,10 @@ class ServerController extends Controller
         return redirect('server');
     }
 
-    public function branches(Server $server)
+    public function info(Server $server)
     {
-        return GitLibrary::branches($server);
-    }
-
-    public function tasks(Server $server)
-    {
-        return $server->tasks;
+        $tasks = $server->tasks;
+        $branches = GitLibrary::branches($server);
+        return compact('tasks', 'branches');
     }
 }

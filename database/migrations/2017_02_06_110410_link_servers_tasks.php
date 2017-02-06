@@ -12,7 +12,7 @@ class LinkServersTasks extends Migration
      */
     public function up()
     {
-        Schema::create('link_task_server', function (Blueprint $table) {
+        Schema::create('tasks_servers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('task_id')->unsigned()->index();
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
@@ -31,6 +31,6 @@ class LinkServersTasks extends Migration
      */
     public function down()
     {
-        Schema::drop('link_task_server');
+        Schema::drop('tasks_servers');
     }
 }

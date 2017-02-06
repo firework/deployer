@@ -40,31 +40,34 @@
         });
     }
 
-    function getBranches (serverId) {
-        return axios.get('/server/' + serverId + '/branches');
-    }
-
-    function getTasks (serverId) {
-        return axios.get('/server/' + serverId + '/tasks');
-    }
-
     function fillBranches (serverId) {
         progressBar.classList.add('is-loading');
         taskSelect.disabled = true;
         branchSelect.disabled = true;
 
-        axios.all([ getBranches(serverId), getTasks(serverId) ])
-            .then(axios.spread(function (branches, tasks) {
-                progressBar.classList.remove('is-loading');
-                var branchesName = branches.data.map(function (branch) {
-                    return { key: branch, value: branch };
-                });
-                parseSelect(branchesName, branchSelect);
-                var tasksName = tasks.data.map(function (task) {
-                    return { key: task.id, value: task.name };
-                });
-                parseSelect(tasksName, taskSelect);
-            }));
+        axios.get('/server/' + serverId + '/info')
+            .then(function (response) {
+
+                if(response && response.data) {
+
+                    var branches = response.data.branches || [];
+                    var tasks = response.data.tasks || [];
+
+                    progressBar.classList.remove('is-loading');
+
+                    var branchesName = branches.map(function (branch) {
+                        return { key: branch, value: branch };
+                    });
+
+                    parseSelect(branchesName, branchSelect);
+
+                    var tasksName = tasks.map(function (task) {
+                        return { key: task.id, value: task.name };
+                    });
+
+                    parseSelect(tasksName, taskSelect);
+                }
+            });
     }
 
     function parseSelect (items, select) {

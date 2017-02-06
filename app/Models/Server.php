@@ -29,7 +29,7 @@ class Server extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'link_task_server', 'server_id', 'task_id')->withTimestamps();
+        return $this->belongsToMany(Task::class, 'tasks_servers', 'server_id', 'task_id')->withTimestamps();
     }
 
     public function getNameForIdAttribute()

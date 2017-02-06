@@ -24,7 +24,7 @@ class Task extends Model
 
     public function servers()
     {
-        return $this->belongsToMany(Server::class, 'link_task_server', 'task_id', 'server_id');
+        return $this->belongsToMany(Server::class, 'tasks_servers', 'task_id', 'server_id');
     }
 
     public function hasServer($id)
