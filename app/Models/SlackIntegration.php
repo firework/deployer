@@ -19,6 +19,6 @@ class SlackIntegration extends Model
 
     public function integrations()
     {
-        return $this->belongsToMany(Server::class, 'integration_server', 'slack_id', 'server_id');
+        return $this->belongsToMany(Server::class, 'integration_server', 'slack_id', 'server_id')->withTimestamps();
     }
 }

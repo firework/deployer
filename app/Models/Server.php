@@ -24,7 +24,7 @@ class Server extends Model
 
     public function integrations()
     {
-        return $this->belongsToMany(SlackIntegration::class, 'integration_server', 'server_id', 'slack_id');
+        return $this->belongsToMany(SlackIntegration::class, 'integration_server', 'server_id', 'slack_id')->withTimestamps();
     }
 
     public function getNameForIdAttribute()
