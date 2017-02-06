@@ -40,32 +40,50 @@
         });
     }
 
-    function fillBranches(serverId) {
+    function fillBranches (serverId) {
         progressBar.classList.add('is-loading');
+        taskSelect.disabled = true;
         branchSelect.disabled = true;
 
-        axios.get('/server/' + serverId + '/branches')
-            .then(function(response) {
-
-                progressBar.classList.remove('is-loading');
+        axios.get('/server/' + serverId + '/info')
+            .then(function (response) {
 
                 if(response && response.data) {
-                    var defaultOpt = branchSelect.querySelector("[disabled]");
 
-                    branchSelect.options.length = 0;
+                    var branches = response.data.branches || [];
+                    var tasks = response.data.tasks || [];
 
-                    branchSelect.appendChild(defaultOpt);
+                    progressBar.classList.remove('is-loading');
 
-                    response.data.forEach(function(branch) {
-                        var opt = document.createElement('option');
-                        opt.innerHTML = branch;
-                        opt.value = branch;
-                        branchSelect.appendChild(opt);
+                    var branchesName = branches.map(function (branch) {
+                        return { key: branch, value: branch };
                     });
 
-                    branchSelect.disabled = false;
+                    parseSelect(branchesName, branchSelect);
 
+                    var tasksName = tasks.map(function (task) {
+                        return { key: task.id, value: task.name };
+                    });
+
+                    parseSelect(tasksName, taskSelect);
                 }
             });
+    }
+
+    function parseSelect (items, select) {
+        var defaultOpt = select.querySelector("[disabled]");
+
+        select.options.length = 0;
+
+        select.appendChild(defaultOpt);
+
+        items.forEach(function(item) {
+            var opt = document.createElement('option');
+            opt.innerHTML = item.value;
+            opt.value = item.key;
+            select.appendChild(opt);
+        });
+
+        select.disabled = false;
     }
 })();

@@ -36,6 +36,29 @@
                             </div>
                         </div>
 
+                        @if($servers->count() > 0)
+                        <div class="mdl-grid">
+                            <h5>Servers</h5>
+                        </div>
+
+                        <div class="mdl-grid">
+                            @foreach($servers as $id => $server)
+                                <div class="mdl-cell mdl-cell--6-col">
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ $id }}">
+                                        @if ($task->hasServer($id))
+                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="servers[]" checked />
+                                        @else
+                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="servers[]" />
+                                        @endif
+                                        <span class="mdl-checkbox__label">{{ $server }}</span>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        @else
+                            <h6 class="simple-message">No servers found.</h6>
+                        @endif
+
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col text-right">
                                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent text-right" type="submmit">

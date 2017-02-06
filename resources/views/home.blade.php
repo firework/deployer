@@ -32,10 +32,6 @@
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('task_id') ? 'is-invalid' : ''}}">
 									<select name="task_id" class="mdl-textfield__input" id="select-task">
 										<option disabled selected value="-1">Select a Task</option>
-
-										@foreach ($tasks as $task)
-											<option value="{{ $task->id }}">{{ $task->name }}</option>
-										@endforeach
 									</select>
 
 									<label class="mdl-textfield__label" for="server">Task</label>
