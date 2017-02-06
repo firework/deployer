@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Server;
 use App\Http\Requests\TaskRequest;
-
 
 class TaskController extends Controller
 {
@@ -28,7 +28,10 @@ class TaskController extends Controller
     public function create()
     {
         $task = new Task();
-        return view('task.form', compact('task'));
+
+        $servers = Server::lists('name', 'id');
+
+        return view('task.form', compact('task', 'servers'));
     }
 
     /**
@@ -39,7 +42,10 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        Task::create($request->all());
+        $task = Task::create($request->all());
+
+        $task->servers()->sync($request->get('servers', []));
+
         return redirect('task');
     }
 
@@ -51,7 +57,8 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        return view('task.form', compact('task'));
+        $servers = Server::lists('name', 'id');
+        return view('task.form', compact('task', 'servers'));
     }
 
     /**
@@ -65,6 +72,8 @@ class TaskController extends Controller
     {
         $task->fill($request->all());
         $task->save();
+        $task->servers()->sync($request->get('servers', []));
+
         return redirect('task');
     }
 

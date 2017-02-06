@@ -108,7 +108,7 @@
 
                         <div class="mdl-grid">
                             @foreach($integrations as $id => $integration)
-                                <div class="mdl-cell mdl-cell--4-col">
+                                <div class="mdl-cell mdl-cell--6-col">
                                     <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ $id }}">
                                         @if ($server->hasIntegration($id))
                                             <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="integrations[]" checked />

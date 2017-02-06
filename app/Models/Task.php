@@ -21,4 +21,14 @@ class Task extends Model
     {
         return $this->hasMany(Deploy::class);
     }
+
+    public function servers()
+    {
+        return $this->belongsToMany(Server::class, 'link_task_server', 'task_id', 'server_id');
+    }
+
+    public function hasServer($id)
+    {
+        return in_array($id, $this->servers->modelKeys());
+    }
 }
