@@ -9,8 +9,8 @@
 	<div class="container">
 		<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-offset-desktop">
-				@if($servers->count() > 0 && $tasks->count() > 0)
-					<form method="POST" action="{{ route('deploy') }}" dialog="dialogFire">
+				@if($servers->count() > 0)
+					<form method="POST" action="{{ route('post.deploy') }}" dialog="dialogFire">
 						{{ csrf_field() }}
 
 						<div class="mdl-grid">
@@ -19,10 +19,21 @@
 							<div class="mdl-cell mdl-cell--12-col">
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('server_id') ? 'is-invalid' : ''}}">
 									<select name="server_id" class="mdl-textfield__input" id="select-server">
-										<option disabled selected value="-1">Select a Server</option>
+										<option
+											disabled
+											value="{{ $selectedServer }}"
+											{{ $selectedServer === -1 ? 'selected' : '' }}
+										>
+											Select a Server
+										</option>
 
 										@foreach ($servers as $server)
-											<option value="{{ $server->id }}">{{ $server->name }}</option>
+											<option
+												value="{{ $server->id }}"
+												{{ $server->id === $selectedServer ? 'selected': '' }}
+											>
+												{{ $server->name }}
+											</option>
 										@endforeach
 									</select>
 
@@ -31,7 +42,22 @@
 
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('task_id') ? 'is-invalid' : ''}}">
 									<select name="task_id" class="mdl-textfield__input" id="select-task">
-										<option disabled selected value="-1">Select a Task</option>
+										<option
+											disabled
+											value="{{ $selectedTask }}"
+											{{ $selectedTask === -1 ? 'selected' : '' }}
+										>
+											Select a Task
+										</option>
+
+										@foreach ($tasks as $task)
+											<option
+												value="{{ $task->id }}"
+												{{ $task->id === $selectedTask ? 'selected': '' }}
+											>
+												{{ $task->name }}
+											</option>
+										@endforeach
 									</select>
 
 									<label class="mdl-textfield__label" for="server">Task</label>
@@ -39,7 +65,22 @@
 
 								<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{$errors->has('branch') ? 'is-invalid' : ''}}">
 									<select name="branch" class="mdl-textfield__input" id="select-branch">
-										<option disabled selected value="-1">Select a Branch</option>
+										<option
+											disabled
+											value="-1"
+											{{ $selectedBranch === -1 ? 'selected' : '' }}
+										>
+											Select a Branch
+										</option>
+
+										@foreach ($branches as $branch)
+											<option
+												value="{{ $branch }}"
+												{{ $branch === $selectedBranch ? 'selected': '' }}
+											>
+												{{ $branch }}
+											</option>
+										@endforeach
 									</select>
 
 									<label class="mdl-textfield__label" for="branch">Branch</label>
@@ -57,8 +98,6 @@
 					<h3>Welcome </h3>
 					@if($servers->count() < 1)
 						<p> Please, first register a server clicking <a href="{{ route('server.create')}}">here.</a> </p>
-					@elseif($tasks->count() < 1)
-						<p> Please, first register a task clicking <a href="{{ route('task.create')}}">here</a>.</p>
 					@endif
 				@endif
 			</div>
