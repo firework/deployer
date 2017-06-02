@@ -15,7 +15,7 @@
                                 </span>
 
                                 <span class="mdl-list__item-secondary-content">
-                                    <span>{{ $deploy->serverWithTrashed->name }}</span>
+                                    <span><a href="http://{{ $deploy->serverWithTrashed->name }}" target="_blank">{{ $deploy->serverWithTrashed->name }}</a></span>
                                 </span>
                             </li>
 

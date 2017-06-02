@@ -21,6 +21,7 @@ elixir(function(mix) {
 
 	mix
 		.copy(paths.mdl + '/src/images/**', 'public/img')
+		.copy('resources/assets/img/**', 'public/img')
 		.copy('resources/assets/js/pages/**', 'public/js/pages/')
 	;
 

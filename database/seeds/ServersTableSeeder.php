@@ -13,7 +13,7 @@ class ServersTableSeeder extends Seeder
     public function run()
     {
         Server::create([
-            'name' => 'Vagrant',
+            'name' => 'www.deployer.dev',
             'host' => 'localhost',
             'username' => 'vagrant',
             'password' => '',
