@@ -5,7 +5,7 @@ elixir(function(mix) {
 	var paths = {
 		'mdl': 'node_modules/material-design-lite',
 		'dialog': 'node_modules/dialog-polyfill',
-		'socketio' : 'node_modules/socket.io-client/dist',
+		'socketio' : 'node_modules/socket.io-client',
 		'axios': 'node_modules/axios/dist'
 	};
 
