@@ -23,17 +23,24 @@ class DeployController extends Controller
         $selectedTask = $request->get('task_id', -1);
         $selectedBranch = $request->get('branch', -1);
 
-        if ($request->server_id) {
+        if ($selectedServer !== -1) {
             $server = $servers->find($request->server_id);
-            $tasks = $server->tasks;
-            $branches = GitLibrary::branches($server);
 
-            if (empty($tasks->find($selectedTask))) {
+            if (!empty($server)) {
+                $tasks = $server->tasks;
+                $branches = GitLibrary::branches($server);
+
+                if (empty($tasks->find($selectedTask))) {
+                    $selectedTask = -1;
+                }
+
+                if (!in_array($selectedBranch, $branches)) {
+                    $selectedBranch = -1;
+                }
+            } else {
                 $selectedTask = -1;
-            }
-
-            if (!in_array($branches, $selectedBranch)) {
                 $selectedBranch = -1;
+                $selectedServer = -1;
             }
         }
 
