@@ -8,16 +8,50 @@ use App\Models\Task;
 use App\Http\Requests\RunDeployRequest;
 use Illuminate\Http\Request;
 use App\Jobs\DeploymentQueueJob;
+use App\Libraries\GitLibrary;
 
 class DeployController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $servers =  Server::all();
-        $tasks = Task::all();
+        $servers = Server::all();
+        $tasks = [];
+        $branches = [];
 
-        return view('home', compact('servers', 'tasks'));
+        $selectedServer = $request->get('server_id', -1);
+        $selectedTask = $request->get('task_id', -1);
+        $selectedBranch = $request->get('branch', -1);
+
+        if ($selectedServer !== -1) {
+            $server = $servers->find($request->server_id);
+
+            if (!empty($server)) {
+                $tasks = $server->tasks;
+                $branches = GitLibrary::branches($server);
+
+                if (empty($tasks->find($selectedTask))) {
+                    $selectedTask = -1;
+                }
+
+                if (!in_array($selectedBranch, $branches)) {
+                    $selectedBranch = -1;
+                }
+            } else {
+                $selectedTask = -1;
+                $selectedBranch = -1;
+                $selectedServer = -1;
+            }
+        }
+
+        return view('home', compact(
+            'servers',
+            'tasks',
+            'branches',
+            'selectedServer',
+            'selectedTask',
+            'selectedBranch'
+        ));
     }
 
     public function deployIt(RunDeployRequest $request)
@@ -32,7 +66,7 @@ class DeployController extends Controller
 
         $this->dispatch(new DeploymentQueueJob($deploy));
 
-    	return redirect()->route('deploy.status', [$deploy->id]);
+        return redirect()->route('deploy.status', [$deploy->id]);
     }
 
     public function deploys(Request $request)

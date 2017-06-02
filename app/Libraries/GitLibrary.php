@@ -15,7 +15,7 @@ class GitLibrary
 
         SSHLibrary::run($server, ['git fetch origin -p']);
 
-        SSHLibrary::run($server, $commands, function($line) use (&$branches) {
+        SSHLibrary::run($server, $commands, function ($line) use (&$branches) {
             $branches = array_filter(explode(PHP_EOL, $line));
         });
 
