@@ -21,7 +21,7 @@
 									<select name="server_id" class="mdl-textfield__input" id="select-server">
 										<option
 											disabled
-											value="{{ $selectedServer }}"
+											value="-1"
 											{{ $selectedServer === -1 ? 'selected' : '' }}
 										>
 											Select a Server
@@ -44,7 +44,7 @@
 									<select name="task_id" class="mdl-textfield__input" id="select-task">
 										<option
 											disabled
-											value="{{ $selectedTask }}"
+											value="-1"
 											{{ $selectedTask === -1 ? 'selected' : '' }}
 										>
 											Select a Task
