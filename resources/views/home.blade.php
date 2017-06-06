@@ -30,7 +30,7 @@
 										@foreach ($servers as $server)
 											<option
 												value="{{ $server->id }}"
-												{{ $server->id === $selectedServer ? 'selected': '' }}
+												{{ $server->id == $selectedServer ? 'selected': '' }}
 											>
 												{{ $server->name }}
 											</option>
@@ -53,7 +53,7 @@
 										@foreach ($tasks as $task)
 											<option
 												value="{{ $task->id }}"
-												{{ $task->id === $selectedTask ? 'selected': '' }}
+												{{ $task->id == $selectedTask ? 'selected': '' }}
 											>
 												{{ $task->name }}
 											</option>
@@ -76,7 +76,7 @@
 										@foreach ($branches as $branch)
 											<option
 												value="{{ $branch }}"
-												{{ $branch === $selectedBranch ? 'selected': '' }}
+												{{ $branch == $selectedBranch ? 'selected': '' }}
 											>
 												{{ $branch }}
 											</option>
