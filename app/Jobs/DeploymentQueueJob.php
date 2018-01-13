@@ -90,7 +90,9 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         });
 
         if ($ssh->status() !== 0) {
-            throw new \Exception('An error has occurred running deploy commands');
+            $this->failed();
+
+            return;
         }
 
         $deploy->status = 'success';

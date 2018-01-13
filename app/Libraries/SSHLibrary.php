@@ -35,7 +35,7 @@ class SSHLibrary
 
         array_unshift($deploy_commands, 'cd '. $path);
 
-        $ssh = SSH::into(strval(static::$server->id));
+        $ssh = SSH::into((string) static::$server->id);
 
         $ssh->run($deploy_commands, $callback);
 
