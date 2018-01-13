@@ -81,13 +81,17 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
         }
 
-        SSHLibrary::run($deploy->server, $deploy_commands, function($line) use ($deploy) {
+        $ssh = SSHLibrary::run($deploy->server, $deploy_commands, function($line) use ($deploy) {
             $deployOutput = new DeployOutputs();
             $deployOutput->output = mb_convert_encoding($line.PHP_EOL, 'UTF-8');
             $deploy->outputs()->save($deployOutput);
 
             event(new DeployOutputsEvent($deployOutput));
         });
+
+        if ($ssh->status() !== 0) {
+            throw new \Exception('An error has occurred running deploy commands');
+        }
 
         $deploy->status = 'success';
         $deploy->finished_at = Carbon::now();
