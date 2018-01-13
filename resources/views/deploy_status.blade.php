@@ -34,6 +34,18 @@
                                     <span class="">Status:</span>
                                 </span>
 
+                                @if ($deploy->status === 'error')
+                                    <a 
+                                        id="retry-btn" 
+                                        href="{{ route('post.deploy', [ 'server_id' => $deploy->server_id, 'task_id' => $deploy->task_id, 'branch' => $deploy->branch ]) }}" 
+                                        class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+                                    >
+                                        <i class="material-icons">refresh</i>
+                                    </a>
+
+                                    <div class="mdl-tooltip" data-mdl-for="retry-btn">Retry Task</div>
+                                @endif
+
                                 <span class="mdl-list__item-secondary-content">
                                     <span class="status status-{{ $deploy->status }}" id="status">
                                         {{ ucfirst($deploy->status) }}
