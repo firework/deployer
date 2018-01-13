@@ -148,6 +148,9 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        // Docker
+        Vessel\VesselServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
