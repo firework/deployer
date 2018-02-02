@@ -35,9 +35,9 @@
                                 </span>
 
                                 @if ($deploy->status === 'error')
-                                    <a 
-                                        id="retry-btn" 
-                                        href="{{ route('post.deploy', [ 'server_id' => $deploy->server_id, 'task_id' => $deploy->task_id, 'branch' => $deploy->branch ]) }}" 
+                                    <a
+                                        id="retry-btn"
+                                        href="{{ route('post.deploy', [ 'server_id' => $deploy->server_id, 'task_id' => $deploy->task_id, 'branch' => $deploy->branch ]) }}"
                                         class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
                                     >
                                         <i class="material-icons">refresh</i>
@@ -69,6 +69,6 @@
 
 @section('scripts')
     @parent
-    <script type="text/javascript" src="{{ elixir('js/pages/deploy_status.js') }}"></script>
+    <script type="text/javascript" src="{{ mix('js/pages/deploy_status.js') }}"></script>
 
 @endsection

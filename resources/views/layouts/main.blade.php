@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="{{ url('/img/apple-touch-icon-144x144.png') }}">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ url('/img/apple-touch-icon-152x152.png') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="{{ elixir('css/app.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 </head>
 <body>
@@ -72,7 +72,7 @@
 	</dialog>
 
     @section('scripts')
-        <script src="{{ elixir('js/vendor/global.js') }}"></script>
+        <script src="{{ mix('js/vendor/global.js') }}"></script>
     @show
 </body>
 </html>

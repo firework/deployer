@@ -1,9 +1,12 @@
 {
+  "name": "deployer",
   "private": true,
   "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp && gulp watch",
-    "reinstall": "rm -rf node_modules/ && npm i --no-progress"
+    "dev": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "yarn dev --watch",
+    "watch-poll": "yarn dev --watch --watch-poll",
+    "hot": "NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "NODE_ENV=production node_modules/webpack/bin/webpack.js --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -13,8 +16,6 @@
     "socket.io": "^1.4.8"
   },
   "devDependencies": {
-    "laravel-elixir-browsersync-official": "^1.0.0",
-    "laravel-elixir": "^6.0.0-4",
-    "gulp": "^3.9.1"
+    "laravel-mix": "^2.0.0"
   }
 }
