@@ -2,8 +2,8 @@
 @import "components/variables";
 
 // Vendors
-@import "node_modules/material-design-lite/src/material-design-lite";
-@import "node_modules/dialog-polyfill/dialog-polyfill";
+@import "~material-design-lite/src/material-design-lite";
+@import "~dialog-polyfill/dialog-polyfill";
 
 // App
 @import "components/scaffolding";

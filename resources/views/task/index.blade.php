@@ -2,7 +2,7 @@
 
 @section('scripts')
 	@parent
-	<script type="text/javascript" src="{{ elixir('js/pages/delete_dialog.js') }}"></script>
+	<script type="text/javascript" src="{{ mix('js/pages/delete_dialog.js') }}"></script>
 @endsection
 
 @section('content')
