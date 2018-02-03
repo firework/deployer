@@ -13,17 +13,17 @@ mix.options({
 
 mix.sass('resources/assets/sass/app.scss', 'public/css')
     .combine([
-		paths.mdl + '/material.min.js',
-		paths.dialog + '/dialog-polyfill.js',
-		paths.socketio + '/socket.io.js',
-		paths.axios + '/axios.js',
-		'resources/assets/js/lib/main.js',
+        paths.mdl + '/material.min.js',
+        paths.dialog + '/dialog-polyfill.js',
+        paths.socketio + '/socket.io.js',
+        paths.axios + '/axios.js',
+        'resources/assets/js/lib/main.js',
     ], 'public/js/vendor/global.js')
     .copy(paths.mdl + '/src/images/**', 'public/img')
     .copy('resources/assets/img/**', 'public/img')
     .copy('resources/assets/js/pages/**', 'public/js/pages/')
     .version([
-		'public/css/app.css',
-		'public/js/pages/**',
-		'public/js/vendor/**',
-	]);
+        'public/css/app.css',
+        'public/js/pages/**',
+        'public/js/vendor/**',
+    ]);
