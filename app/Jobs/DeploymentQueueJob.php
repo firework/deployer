@@ -71,15 +71,15 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             ] ]);
         }
 
-        $deploy_commands = $deploy->task->commands;
-
-        $deploy_commands = array_filter(explode(PHP_EOL, $deploy_commands));
+        $deploy_commands = explode(PHP_EOL, $deploy->task->commands);
 
         foreach ($deploy_commands as $key => &$deploy_command) {
             $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
             $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
             $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
         }
+        
+        $deploy_commands = array_filter($deploy_commands);
 
         $ssh = SSHLibrary::run($deploy->server, $deploy_commands, function($line) use ($deploy) {
             $deployOutput = new DeployOutputs();
