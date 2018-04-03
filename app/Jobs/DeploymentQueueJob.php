@@ -73,7 +73,7 @@ class DeploymentQueueJob extends Job implements ShouldQueue
 
         $deploy_commands = $deploy->task->commands;
 
-        $deploy_commands = explode(PHP_EOL, $deploy_commands);
+        $deploy_commands = array_filter(explode(PHP_EOL, $deploy_commands));
 
         foreach ($deploy_commands as $key => &$deploy_command) {
             $deploy_command = str_replace(["\r", "\n", "\t"], '', $deploy_command);
