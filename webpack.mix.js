@@ -3,7 +3,7 @@ const mix = require('laravel-mix');
 let paths = {
     'mdl': 'node_modules/material-design-lite',
     'dialog': 'node_modules/dialog-polyfill',
-    'socketio' : 'node_modules/socket.io-client',
+    'socketio' : 'node_modules/socket.io-client/dist',
     'axios': 'node_modules/axios/dist'
 };
 
