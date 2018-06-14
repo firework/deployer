@@ -55,13 +55,13 @@
     }
 
     function validateAndSubmitForm () {
-        if (validateSelects()) {
-            dialog.showModal(function() {
-                formDeploy.submit();
-            });
-
+        if (! validateSelects()) {
             return;
         }
+
+        dialog.showModal(function() {
+            formDeploy.submit();
+        });
     }
 
     function fillBranches (serverId) {
@@ -128,17 +128,17 @@
     }
 
     function getUrlButtonClicked () {
-        if (validateSelects()) {
-            var route = laroute.route('get.deploy', {
-                server_id: serverSelect.value,
-                task_id: taskSelect.value,
-                branch: branchSelect.value,
-            });
-
-            clipboard.writeText(route);
-            snackbarMessage('Copied to clipboard.');
-
+        if (! validateSelects()) {
             return;
         }
+
+        var route = laroute.route('get.deploy', {
+            server_id: serverSelect.value,
+            task_id: taskSelect.value,
+            branch: branchSelect.value,
+        });
+
+        clipboard.writeText(route);
+        snackbarMessage('Copied to clipboard.');
     }
 })();
