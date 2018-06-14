@@ -93,6 +93,8 @@
                                 <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="fire">Fire!</button>
 
                                 <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="get-url">Get URL</button>
+
+                                <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="get-deploy-url">Get Deploy URL</button>
                             </div>
                         </div>
                     </form>

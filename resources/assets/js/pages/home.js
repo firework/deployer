@@ -6,7 +6,8 @@
         taskSelect = document.querySelector('#select-task'),
         branchSelect = document.querySelector('#select-branch'),
         progressBar = document.querySelector('#progress-bar'),
-        getUrlButton = document.querySelector('#get-url');
+        getUrlButton = document.querySelector('#get-url'),
+        getDeployUrlButton = document.querySelector('#get-deploy-url');
 
     if (showDialogButton) {
         var dialog = new DeployerConfirmDialog();
@@ -22,7 +23,15 @@
         getUrlButton.addEventListener('click', function(event) {
             event.preventDefault();
 
-            getUrlButtonClicked();
+            getUrlButtonClicked(false);
+        });
+    }
+
+    if (getDeployUrlButton) {
+        getDeployUrlButton.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            getUrlButtonClicked(true);
         });
     }
 
@@ -127,12 +136,12 @@
         select.disabled = false;
     }
 
-    function getUrlButtonClicked () {
+    function getUrlButtonClicked (deploy) {
         if (! validateSelects()) {
             return;
         }
 
-        var route = laroute.route('get.deploy', {
+        var route = laroute.route(deploy ? 'get.deploy' : 'home', {
             server_id: serverSelect.value,
             task_id: taskSelect.value,
             branch: branchSelect.value,
