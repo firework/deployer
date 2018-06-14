@@ -69,7 +69,12 @@
 	        <button type="button" class="mdl-button accept">Yes</button>
 	        <button type="button" class="mdl-button close">Cancel</button>
 	    </div>
-	</dialog>
+    </dialog>
+
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
 
     @section('scripts')
         <script src="{{ mix('js/vendor/global.js') }}"></script>

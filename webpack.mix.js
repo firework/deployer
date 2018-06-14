@@ -1,25 +1,22 @@
 const mix = require('laravel-mix');
 
-let paths = {
-    'mdl': 'node_modules/material-design-lite',
-    'dialog': 'node_modules/dialog-polyfill',
-    'socketio' : 'node_modules/socket.io-client/dist',
-    'axios': 'node_modules/axios/dist'
-};
+const jsFiles = [
+    'resources/assets/js/laroute.js',
+    'resources/assets/js/lib/main.js',
+    'node_modules/material-design-lite/material.min.js',
+    'node_modules/dialog-polyfill/dialog-polyfill.js',
+    'node_modules/socket.io-client/dist/socket.io.js',
+    'node_modules/axios/dist/axios.js',
+    'node_modules/clipboard-polyfill/build/clipboard-polyfill.js',
+];
 
 mix.options({
     processCssUrls: false,
 });
 
 mix.sass('resources/assets/sass/app.scss', 'public/css')
-    .combine([
-        paths.mdl + '/material.min.js',
-        paths.dialog + '/dialog-polyfill.js',
-        paths.socketio + '/socket.io.js',
-        paths.axios + '/axios.js',
-        'resources/assets/js/lib/main.js',
-    ], 'public/js/vendor/global.js')
-    .copy(paths.mdl + '/src/images/**', 'public/img')
+    .combine(jsFiles, 'public/js/vendor/global.js')
+    .copy('node_modules/material-design-lite/src/images/**', 'public/img')
     .copy('resources/assets/img/**', 'public/img')
     .copy('resources/assets/js/pages/**', 'public/js/pages/')
     .version([

@@ -160,6 +160,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Collective\Remote\RemoteServiceProvider::class,
+
+        Lord\Laroute\LarouteServiceProvider::class,
     ],
 
     /*

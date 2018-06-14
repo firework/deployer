@@ -5,7 +5,9 @@
         serverSelect = document.querySelector('#select-server'),
         taskSelect = document.querySelector('#select-task'),
         branchSelect = document.querySelector('#select-branch'),
-        progressBar = document.querySelector('#progress-bar');
+        progressBar = document.querySelector('#progress-bar'),
+        getUrlButton = document.querySelector('#get-url'),
+        getDeployUrlButton = document.querySelector('#get-deploy-url');
 
     if (showDialogButton) {
         var dialog = new DeployerConfirmDialog();
@@ -17,30 +19,58 @@
         });
     }
 
+    if (getUrlButton) {
+        getUrlButton.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            getUrlButtonClicked(false);
+        });
+    }
+
+    if (getDeployUrlButton) {
+        getDeployUrlButton.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            getUrlButtonClicked(true);
+        });
+    }
+
     if (serverSelect) {
-        serverSelect.addEventListener("change", function() {
+        serverSelect.addEventListener('change', function() {
             fillBranches(serverSelect.value);
         });
     }
 
-    function validateAndSubmitForm () {
-        var error = false;
+    function validateSelects () {
+        var validation = true;
         var selects = [ serverSelect, taskSelect, branchSelect ];
 
         selects.forEach(function(select) {
-            if (select.value === "-1") {
+            if (select.value === '-1') {
+                validation = false;
                 select.parentNode.classList.add('is-invalid');
-                error = true;
-            } else {
-                select.parentNode.classList.remove('is-invalid');
-            }
-        }, this);
 
-        if (!error) {
-            dialog.showModal(function() {
-                formDeploy.submit();
-            });
+                return;
+            }
+
+            select.parentNode.classList.remove('is-invalid');
+        });
+
+        if (! validation) {
+            snackbarMessage('All fields are mandatory');
         }
+
+        return validation;
+    }
+
+    function validateAndSubmitForm () {
+        if (! validateSelects()) {
+            return;
+        }
+
+        dialog.showModal(function() {
+            formDeploy.submit();
+        });
     }
 
     function fillBranches (serverId) {
@@ -48,13 +78,21 @@
         taskSelect.disabled = true;
         branchSelect.disabled = true;
 
-        axios.get('/server/' + serverId + '/info')
-            .then(function (response) {
-                progressBar.classList.remove('is-loading');
+        var route = laroute.route('server.info', {
+            server: serverId,
+        });
 
+        axios.get(route)
+            .then(function (response) {
                 if (response && response.data) {
                     parseBranchesResponse(response.data);
                 }
+            })
+            .catch(function() {
+                snackbarMessage('An error occurred');
+            })
+            .finally(function() {
+                progressBar.classList.remove('is-loading');
             });
     }
 
@@ -63,20 +101,26 @@
         var tasks = data.tasks || [];
 
         var branchesName = branches.map(function (branch) {
-            return { key: branch, value: branch };
+            return {
+                key: branch,
+                value: branch,
+            };
         });
 
         parseSelect(branchesName, branchSelect);
 
         var tasksName = tasks.map(function (task) {
-            return { key: task.id, value: task.name };
+            return {
+                key: task.id,
+                value: task.name,
+            };
         });
 
         parseSelect(tasksName, taskSelect);
     }
 
     function parseSelect (items, select) {
-        var defaultOpt = select.querySelector("[disabled]");
+        var defaultOpt = select.querySelector('[disabled]');
 
         select.options.length = 0;
 
@@ -90,5 +134,20 @@
         });
 
         select.disabled = false;
+    }
+
+    function getUrlButtonClicked (deploy) {
+        if (! validateSelects()) {
+            return;
+        }
+
+        var route = laroute.route(deploy ? 'get.deploy' : 'home', {
+            server_id: serverSelect.value,
+            task_id: taskSelect.value,
+            branch: branchSelect.value,
+        });
+
+        clipboard.writeText(route);
+        snackbarMessage('Copied to clipboard.');
     }
 })();

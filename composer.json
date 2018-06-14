@@ -11,7 +11,8 @@
         "predis/predis": "^1.1",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/homestead": "^4.0",
-        "shipping-docker/vessel": "^2.1"
+        "shipping-docker/vessel": "^2.1",
+        "lord/laroute": "^2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

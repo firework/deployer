@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "clipboard-polyfill": "^2.4.7",
     "dialog-polyfill": "^0.4.3",
     "ioredis": "^2.2.0",
     "material-design-lite": "^1.1.3",
