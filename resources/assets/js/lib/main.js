@@ -28,3 +28,11 @@ function DeployerConfirmDialog() {
         callback: this.callback
     };
 }
+
+function snackbarMessage (text) {
+    var snackbarContainer = document.querySelector('#snackbar');
+
+    snackbarContainer.MaterialSnackbar.showSnackbar({
+        message: text,
+    });
+}
