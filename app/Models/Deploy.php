@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deploy extends Model
 {
+    const STATUS_RUNNING = 'running';
+    const STATUS_ERROR = 'error';
+    const STATUS_SUCCESS = 'success';
+
     protected $table = 'deploys';
 
     protected $dates = ['finished_at'];
