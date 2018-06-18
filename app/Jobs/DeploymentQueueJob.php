@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Events\DeployOutputsEvent;
 use App\Jobs\Job;
 use Carbon\Carbon;
+use App\Models\Deploy;
 use App\Models\DeployOutputs;
 use App\Libraries\SSHLibrary;
 use App\Libraries\SlackLibrary;
@@ -18,13 +19,14 @@ class DeploymentQueueJob extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     protected $deploy;
+    protected $startedAt;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($deploy)
+    public function __construct(Deploy $deploy)
     {
         $this->deploy = $deploy;
     }
@@ -36,8 +38,10 @@ class DeploymentQueueJob extends Job implements ShouldQueue
      */
     public function handle()
     {
+        $this->startedAt = Carbon::now();
+
         $deploy = $this->deploy;
-        $deploy->status = 'running';
+        $deploy->status = Deploy::STATUS_RUNNING;
         $deploy->save();
 
         $url = route('deploy.status', $deploy->id);
@@ -45,29 +49,9 @@ class DeploymentQueueJob extends Job implements ShouldQueue
         foreach($deploy->server->integrations as $integration) {
             SlackLibrary::fire($integration->toArray(), null, [ [
                 'color' => '#0099d7',
-                'text' => "<{$url}|See status here>",
                 'title' => 'New build started! :rocket:',
-                'footer' => "<!date^{$deploy->created_at->timestamp}^{date_num} - {time}|{$deploy->created_at}>",
-                'fields' => [
-                    [
-                        'title' => 'User',
-                        'value' => $deploy->user->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Task',
-                        'value' => $deploy->task->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Server',
-                        'value' => $deploy->server->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Branch',
-                        'value' => $deploy->branch,
-                        'short' => true
-                    ]
-                ],
-                'mrkdwn_in' => [ 'text' ]
+                'title_link' => $url,
+                'fields' => $this->getSlackAttachmentFields(),
             ] ]);
         }
 
@@ -78,7 +62,7 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             $deploy_command = preg_replace('/({{\s*branch\s*}})/', $deploy->branch, $deploy_command);
             $deploy_command = preg_replace('/({{\s*server\s*}})/', $deploy->server->name, $deploy_command);
         }
-        
+
         $deploy_commands = array_filter($deploy_commands);
 
         $ssh = SSHLibrary::run($deploy->server, $deploy_commands, function($line) use ($deploy) {
@@ -95,36 +79,18 @@ class DeploymentQueueJob extends Job implements ShouldQueue
             return;
         }
 
-        $deploy->status = 'success';
+        $deploy->status = Deploy::STATUS_SUCCESS;
         $deploy->finished_at = Carbon::now();
         $deploy->save();
+
+        $timeTaken = $deploy->finished_at->diffInSeconds($this->startedAt);
 
         foreach($deploy->server->integrations as $integration) {
             SlackLibrary::fire($integration->toArray(), null, [ [
                 'color' => 'good',
-                'text' => "<{$url}|See status here>",
-                'title' => 'Woohoo! Build success :white_check_mark:',
-                'footer' => "<!date^{$deploy->finished_at->timestamp}^{date_num} - {time}|{$deploy->finished_at}>",
-                'fields' => [
-                    [
-                        'title' => 'User',
-                        'value' => $deploy->user->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Task',
-                        'value' => $deploy->task->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Server',
-                        'value' => $deploy->server->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Branch',
-                        'value' => $deploy->branch,
-                        'short' => true
-                    ]
-                ],
-                'mrkdwn_in' => [ 'text' ]
+                'title' => "Build success! :white_check_mark: Took {$timeTaken} seconds.",
+                'title_link' => $url,
+                'fields' => $this->getSlackAttachmentFields(),
             ] ]);
         }
 
@@ -135,39 +101,46 @@ class DeploymentQueueJob extends Job implements ShouldQueue
     {
         $deploy = $this->deploy;
 
-        $deploy->status = "error";
+        $deploy->status = Deploy::STATUS_ERROR;
         $deploy->finished_at = Carbon::now();
         $deploy->save();
+
+        $timeTaken = $deploy->finished_at->diffInSeconds($this->startedAt);
 
         $url = route('deploy.status', $deploy->id);
 
         foreach($deploy->server->integrations as $integration) {
             SlackLibrary::fire($integration->toArray(), null, [ [
                 'color' => 'danger',
-                'text' => "<{$url}|See status here>",
-                'title' => 'Help! Build failed :x:',
-                'footer' => "<!date^{$deploy->updated_at->timestamp}^{date_num} - {time}|{$deploy->updated_at}>",
-                'fields' => [
-                    [
-                        'title' => 'User',
-                        'value' => $deploy->user->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Task',
-                        'value' => $deploy->task->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Server',
-                        'value' => $deploy->server->name,
-                        'short' => true
-                    ], [
-                        'title' => 'Branch',
-                        'value' => $deploy->branch,
-                        'short' => true
-                    ]
-                ],
-                'mrkdwn_in' => [ 'text' ]
+                'title' => "Build failed! :x: Took {$timeTaken} seconds.",
+                'title_link' => $url,
+                'fields' => $this->getSlackAttachmentFields(),
             ] ]);
         }
+
+        event(new DeployOutputsEvent($deploy->outputs->first()));
+    }
+
+    public function getSlackAttachmentFields()
+    {
+        return [
+            [
+                'title' => 'User',
+                'value' => $this->deploy->user->name,
+                'short' => true,
+            ], [
+                'title' => 'Task',
+                'value' => $this->deploy->task->name,
+                'short' => true,
+            ], [
+                'title' => 'Server',
+                'value' => $this->deploy->server->name,
+                'short' => true,
+            ], [
+                'title' => 'Branch',
+                'value' => $this->deploy->branch,
+                'short' => true,
+            ],
+        ];
     }
 }
