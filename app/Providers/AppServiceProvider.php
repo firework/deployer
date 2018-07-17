@@ -13,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // workaround to force https on prod with cloudflare
+        if (app()->environment('production')) {
+            url()->forceSchema('https');
+        }
     }
 
     /**
