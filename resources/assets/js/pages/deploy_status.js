@@ -1,5 +1,5 @@
 var pathArray = window.location.pathname.split('/');
-var socket = io('http://'+ window.location.host +':2095');
+var socket = io(window.location.origin + ':2095');
 
 var divOutput =  document.getElementById('output');
 var spanStatus = document.getElementById('status');
