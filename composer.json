@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "laravel/framework": "5.2.*-dev",
         "laravelcollective/remote": "5.2.*",
         "predis/predis": "^1.1",
         "guzzlehttp/guzzle": "^6.2",
