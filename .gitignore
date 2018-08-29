@@ -7,7 +7,6 @@ Homestead.json
 .vagrant
 Vagrantfile
 
-composer.lock
 .DS_Store
 Thumbs.db
 
