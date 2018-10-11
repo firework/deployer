@@ -49,4 +49,8 @@ return [
 
     ],
 
+    'socket' => [
+        'port' => env('SOCKET_PORT'),
+    ],
+
 ];

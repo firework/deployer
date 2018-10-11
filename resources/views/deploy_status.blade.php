@@ -69,6 +69,9 @@
 
 @section('scripts')
     @parent
+    <script>
+        window.SOCKET_PORT = {{ config('broadcasting.socket.port') }};
+    </script>
     <script type="text/javascript" src="{{ mix('js/pages/deploy_status.js') }}"></script>
 
 @endsection

@@ -1,7 +1,7 @@
 var pathArray = window.location.pathname.split('/');
 var origin = window.location.origin.replace(/\/+$/, '');
 
-var socket = io(origin + ':2095');
+var socket = io(origin + ':' + window.SOCKET_PORT);
 
 var divOutput =  document.getElementById('output');
 var spanStatus = document.getElementById('status');
