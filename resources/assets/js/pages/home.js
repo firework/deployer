@@ -80,7 +80,7 @@
 
             confirmDialog.showModal(function() {
                 formDeploy.submit();
-            }, 'Are you <b>really</b> sure you want to execute task <b>"' + taskName + '"</b>? This is a dangerous action!');
+            }, 'Are you <b>really</b> sure you want to execute task <b>"' + taskName + '"</b>? This change cannot be undone.');
         });
     }
 
