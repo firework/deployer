@@ -29,7 +29,9 @@ class Server extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'tasks_servers', 'server_id', 'task_id')->withTimestamps();
+        return $this->belongsToMany(Task::class, 'tasks_servers', 'server_id', 'task_id')
+            ->orderBy('name')
+            ->withTimestamps();
     }
 
     public function getNameForIdAttribute()
