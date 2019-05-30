@@ -30,31 +30,38 @@
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('commands') ? ' is-invalid' : '' }}" >
-                                    <textarea class="mdl-textfield__input" id="commands" name="commands"  rows= "10">{{ $task->commands }}</textarea>
+                                    <textarea class="mdl-textfield__input" id="commands" name="commands" rows="10">{{ $task->commands }}</textarea>
                                     <label class="mdl-textfield__label" for="commands">Commands</label>
                                 </div>
                             </div>
                         </div>
 
-                        @if($servers->count() > 0)
                         <div class="mdl-grid">
-                            <h5>Servers</h5>
-                        </div>
-
-                        <div class="mdl-grid">
-                            @foreach($servers as $id => $server)
-                                <div class="mdl-cell mdl-cell--6-col">
-                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ $id }}">
-                                        @if ($task->hasServer($id))
-                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="servers[]" checked />
-                                        @else
-                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="servers[]" />
-                                        @endif
-                                        <span class="mdl-checkbox__label">{{ $server }}</span>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--full-width {{ $errors->first('commands') ? ' is-invalid' : '' }}" >
+                                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="double_check">
+                                        <input type="checkbox" id="double_check" class="mdl-checkbox__input" name="double_check" value="1" @if ($task->double_check) checked @endif>
+                                        <span class="mdl-checkbox__label">Double check before deploying</span>
                                     </label>
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
+
+                        @if($servers->count() > 0)
+                            <div class="mdl-grid">
+                                <h5>Servers</h5>
+                            </div>
+
+                            <div class="mdl-grid">
+                                @foreach($servers as $id => $server)
+                                    <div class="mdl-cell mdl-cell--6-col">
+                                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="{{ $id }}">
+                                            <input type="checkbox" id="{{ $id }}" value="{{ $id }}" class="mdl-checkbox__input" name="servers[]" @if ($task->hasServer($id)) checked @endif />
+                                            <span class="mdl-checkbox__label">{{ $server }}</span>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
                         @else
                             <h6 class="simple-message">No servers found.</h6>
                         @endif

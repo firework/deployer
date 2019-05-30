@@ -14,7 +14,11 @@ class Task extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name', 'commands'
+        'name', 'commands', 'double_check'
+    ];
+
+    protected $casts = [
+        'double_check' => 'boolean',
     ];
 
     public function deploys()

@@ -53,6 +53,7 @@
                                         @foreach ($tasks as $task)
                                             <option
                                                 value="{{ $task->id }}"
+                                                data-double-check="{{ $task->double_check ? 'true' : 'false' }}"
                                                 {{ $task->id == $selectedTask ? 'selected': '' }}
                                             >
                                                 {{ $task->name }}

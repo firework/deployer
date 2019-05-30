@@ -1,5 +1,4 @@
 function DeployerConfirmDialog() {
-
     this.dialog = document.querySelector('dialog');
 
     if (! this.dialog.showModal) {
@@ -10,8 +9,11 @@ function DeployerConfirmDialog() {
         console.log('callback original')
     };
 
-    this.showModal = function (callback) {
+    this.showModal = function (callback, message) {
         this.callback = callback;
+
+        this.dialog.querySelector('p').innerHTML = message || 'Are you sure?';
+
         this.dialog.showModal();
     }.bind(this);
 
@@ -20,6 +22,7 @@ function DeployerConfirmDialog() {
     }.bind(this));
 
     this.dialog.querySelector('.accept').addEventListener('click', function() {
+        this.dialog.close();
         this.callback.call();
     }.bind(this));
 

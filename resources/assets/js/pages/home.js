@@ -7,10 +7,11 @@
         branchSelect = document.querySelector('#select-branch'),
         progressBar = document.querySelector('#progress-bar'),
         getUrlButton = document.querySelector('#get-url'),
-        getDeployUrlButton = document.querySelector('#get-deploy-url');
+        getDeployUrlButton = document.querySelector('#get-deploy-url'),
+        confirmDialog;
 
     if (showDialogButton) {
-        var dialog = new DeployerConfirmDialog();
+        confirmDialog = new DeployerConfirmDialog();
 
         showDialogButton.addEventListener('click', function(event) {
             event.preventDefault();
@@ -68,8 +69,18 @@
             return;
         }
 
-        dialog.showModal(function() {
-            formDeploy.submit();
+        confirmDialog.showModal(function() {
+            if (taskSelect.selectedOptions[0].dataset.doubleCheck !== 'true') {
+                formDeploy.submit();
+
+                return;
+            }
+
+            var taskName = taskSelect.selectedOptions[0].innerText;
+
+            confirmDialog.showModal(function() {
+                formDeploy.submit();
+            }, 'Are you <b>really</b> sure you want to execute task <b>"' + taskName + '"</b>? This is a dangerous action!');
         });
     }
 
@@ -113,6 +124,9 @@
             return {
                 key: task.id,
                 value: task.name,
+                dataset: {
+                    doubleCheck: task.doubleCheck
+                },
             };
         });
 
@@ -128,8 +142,11 @@
 
         items.forEach(function(item) {
             var opt = document.createElement('option');
+
+            Object.assign(opt.dataset, item.dataset);
             opt.innerHTML = item.value;
             opt.value = item.key;
+
             select.appendChild(opt);
         });
 

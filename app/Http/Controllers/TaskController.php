@@ -71,6 +71,7 @@ class TaskController extends Controller
     public function update(TaskRequest $request, Task $task)
     {
         $task->fill($request->all());
+        $task->double_check = $request->has('double_check');
         $task->save();
         $task->servers()->sync($request->get('servers', []));
 

@@ -66,8 +66,15 @@ class ServerController extends Controller
 
     public function info(Server $server)
     {
-        $tasks = $server->tasks;
+        $tasks = $server->tasks->map(function($task) {
+            return [
+                'id' => $task->id,
+                'name' => $task->name,
+                'doubleCheck' => $task->double_check,
+            ];
+        });
         $branches = GitLibrary::branches($server);
+
         return compact('tasks', 'branches');
     }
 }
