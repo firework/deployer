@@ -9,7 +9,7 @@
     "prod": "NODE_ENV=production node_modules/webpack/bin/webpack.js --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "clipboard-polyfill": "^2.4.7",
     "dialog-polyfill": "^0.4.3",
     "dotenv": "^6.1.0",
